@@ -1,18 +1,18 @@
 <template>
-  <div id="app"></div>
+  <div id="app">
+    <CirclesHead></CirclesHead>
+    <CirclesBody></CirclesBody>
+  </div>
 </template>
 
 <script>
+import CirclesHead from "./views/Head";
+import CirclesBody from "./views/Body";
 export default {
   name: "app",
-  components: {}
+  components: { CirclesHead, CirclesBody }
 };
 </script>
 
-<style>
-#app {
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-</style>
+<style scoped>
+</style>>
