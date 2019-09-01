@@ -2,13 +2,18 @@
   <div class="head">
     <div class="head-content">
       <div class="head-content-left">
-        <div class="head-content-left-logo">Logo</div>
+        <div class="head-content-left-logo"></div>
         <div class="head-content-left-menu">
-          <div class="head-content-left-menu-item">
-            <span>首页</span>
+          <div
+            v-for="(item,i) in menus"
+            :key="i"
+            class="head-content-left-menu-item"
+            @click="menuClick(item)"
+          >
+            <span
+              :class="{'head-content-left-menu-item-active':item.index===menuCurrent}"
+            >{{item.title}}</span>
           </div>
-          <div class="head-content-left-menu-item">发现</div>
-          <div class="head-content-left-menu-item">等你来答</div>
         </div>
         <div class="head-content-left-action">
           <a-input-search
@@ -44,25 +49,43 @@
 export default {
   data() {
     return {
-      quesBtn: true
+      //提问按钮显示与否
+      quesBtn: true,
+      //当前点击的导航菜单
+      menuCurrent: false,
+      //导航菜单
+      menus: [
+        {
+          title: "首页",
+          index: 1
+        },
+        {
+          title: "发现",
+          index: 2
+        },
+        {
+          title: "等你来答",
+          index: 3
+        }
+      ]
     };
   },
   methods: {
     //搜索框进行搜索
-    search() {
-      console.log(11);
-    },
+    search() {},
     //搜索框聚焦
     focus() {
       this.quesBtn = false;
     },
+    //搜索框失去焦点
     blur() {
       this.quesBtn = true;
+    },
+    menuClick(menu) {
+      this.menuCurrent = menu.index;
     }
   },
-  created() {
-    console.log(this.$message);
-  }
+  created() {}
 };
 </script>
 
@@ -89,12 +112,28 @@ export default {
   margin: 0 23px;
 }
 .head-content-left-menu .head-content-left-menu-item {
+  
   display: flex;
   align-items: center;
   font-size: 15px;
   color: #8590a6;
   font-weight: 600;
   padding: 0px 17px;
+  cursor: pointer;
+}
+.head-content-left-menu .head-content-left-menu-item-active {
+  position: relative;
+  color: #444;
+  padding: 14px 0;
+}
+.head-content-left-menu .head-content-left-menu-item-active::after {
+  position:absolute;
+  left:0;
+  right: 0;
+  bottom: 0;
+  content: "";
+  height: 3px;
+  background-color: #0084ff;
 }
 .head-content-left-action {
   display: flex;
@@ -102,7 +141,7 @@ export default {
 }
 .head-content-left-search {
   width: 326px;
-  transition: width .5s;
+  transition: width 0.5s;
 }
 .head-content-left-search-focus {
   width: 400px;
@@ -124,7 +163,7 @@ export default {
 .head-content-left-question-leave-active {
   transition: all 0.2s;
 }
-.head-content-left-question  {
+.head-content-left-question {
   padding: 0 10px;
 }
 .head-content-right {
@@ -137,5 +176,6 @@ export default {
 .head-content-right .head-content-right-mes,
 .head-content-right .head-content-right-user {
   margin-left: 40px;
+  cursor: pointer;
 }
 </style>
