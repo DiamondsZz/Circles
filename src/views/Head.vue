@@ -52,7 +52,7 @@ export default {
       //提问按钮显示与否
       quesBtn: true,
       //当前点击的导航菜单
-      menuCurrent: false,
+      menuCurrent: 1,
       //导航菜单
       menus: [
         {
