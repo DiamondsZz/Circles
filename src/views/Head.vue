@@ -81,6 +81,8 @@ export default {
 <style scoped>
 /*首页头部*/
 .head {
+  min-width: 1000px;
+  background-color: #fff;
   box-shadow: 0 1px 3px rgba(26, 26, 26, 0.1);
 }
 .head-content {
