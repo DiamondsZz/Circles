@@ -1,6 +1,6 @@
 <template>
   <div class="body">
-    <div class="body-content"></div>
+    <div class="body-content">333</div>
   </div>
 </template>
 
