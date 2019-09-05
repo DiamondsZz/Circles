@@ -1,18 +1,26 @@
 <template>
   <div class="body">
     <div class="body-left">
-      <a-tabs defaultActiveKey="1">
+      <a-tabs defaultActiveKey="1" :animated="false">
         <a-tab-pane tab="推荐" key="1">
-          <a-list itemLayout="horizontal" :dataSource="data">
+          <a-list itemLayout="vertical" :dataSource="data" :locale="{emptyText: '暂无数据'}">
             <a-list-item slot="renderItem" slot-scope="item">
+              <template slot="actions" v-for="{type, text} in actions">
+                <span :key="type">
+                  <a-icon :type="type" style="margin-right: 8px" />
+                  {{text}}
+                </span>
+              </template>
+              <img
+                slot="extra"
+                width="272"
+                alt="logo"
+                src="https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png"
+              />
               <a-list-item-meta
                 description="Ant Design, a design language for background applications, is refined by Ant UED Team"
               >
                 <a slot="title" href="https://vue.ant.design/">{{item.title}}</a>
-                <a-avatar
-                  slot="avatar"
-                  src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
-                />
               </a-list-item-meta>
             </a-list-item>
           </a-list>
@@ -43,7 +51,13 @@ const data = [
 export default {
   data() {
     return {
-      data
+      data,
+      actions: [
+        { type: "star-o", text: "156" },
+        { type: "like-o", text: "156" },
+        { type: "message", text: "2" },
+       
+      ]
     };
   }
 };
@@ -61,10 +75,16 @@ export default {
   background-color: #fff;
   margin-right: 10px;
 }
-.body .body-left >>> .ant-tabs-tab {
+.body-left >>> .ant-tabs-tab {
   margin: 0 22px;
-  padding: 20px 0;
+  padding: 18px 0;
   font-size: 16px;
+}
+.body-left >>> .ant-tabs-ink-bar {
+  display: none !important;
+}
+.body-left >>> .ant-list-item {
+  padding: 20px;
 }
 .body .body-right {
   background-color: #fff;
