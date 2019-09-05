@@ -11,8 +11,8 @@
             @click="menuClick(item)"
           >
             <span
-              :class="{'head-content-left-menu-item-active':item.index===menuCurrent}"
-            >{{item.title}}</span>
+              :class="{'head-content-left-menu-item-active':item===menuCurrent}"
+            >{{item}}</span>
           </div>
         </div>
         <div class="head-content-left-action">
@@ -32,10 +32,10 @@
       </div>
       <div class="head-content-right">
         <span class="head-content-right-info">
-          <a-icon type="bell" theme="filled" style="fontSize:22px;" />
+          <a-icon type="bell" theme="filled" class="head-icon" />
         </span>
         <span class="head-content-right-mes">
-          <a-icon type="message" theme="filled" style="fontSize:22px;" />
+          <a-icon type="message" theme="filled" class="head-icon" />
         </span>
         <span class="head-content-right-user">
           <a-avatar icon="user" />
@@ -52,22 +52,9 @@ export default {
       //提问按钮显示与否
       quesBtn: true,
       //当前点击的导航菜单
-      menuCurrent: 1,
+      menuCurrent: '首页',
       //导航菜单
-      menus: [
-        {
-          title: "首页",
-          index: 1
-        },
-        {
-          title: "发现",
-          index: 2
-        },
-        {
-          title: "等你来答",
-          index: 3
-        }
-      ]
+      menus: ["首页", "发现", "等你来答"]
     };
   },
   methods: {
@@ -81,15 +68,18 @@ export default {
     blur() {
       this.quesBtn = true;
     },
+    //点击导航菜单选项
     menuClick(menu) {
-      this.menuCurrent = menu.index;
+      this.menuCurrent = menu;
     }
   },
+
   created() {}
 };
 </script>
 
 <style scoped>
+/*首页头部*/
 .head {
   box-shadow: 0 1px 3px rgba(26, 26, 26, 0.1);
 }
@@ -112,12 +102,10 @@ export default {
   margin: 0 23px;
 }
 .head-content-left-menu .head-content-left-menu-item {
-  
   display: flex;
   align-items: center;
   font-size: 15px;
   color: #8590a6;
-  font-weight: 600;
   padding: 0px 17px;
   cursor: pointer;
 }
@@ -125,10 +113,11 @@ export default {
   position: relative;
   color: #444;
   padding: 14px 0;
+  font-weight: 600;
 }
 .head-content-left-menu .head-content-left-menu-item-active::after {
-  position:absolute;
-  left:0;
+  position: absolute;
+  left: 0;
   right: 0;
   bottom: 0;
   content: "";
@@ -177,5 +166,9 @@ export default {
 .head-content-right .head-content-right-user {
   margin-left: 40px;
   cursor: pointer;
+}
+.head-icon {
+  font-size: 22px;
+  color: #8590a6;
 }
 </style>
