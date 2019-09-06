@@ -18,9 +18,15 @@
                 src="https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png"
               />
               <a-list-item-meta
-                description="Ant Design, a design language for background applications, is refined by Ant UED Team"
+                description="Ant Design, a design language for background applications, 
+                is refined by Ant UED TeamAnt Design, 
+                a design language for background applications, 
+                is refined by Ant UED TeamAnt Design,
+                 a design language for background applications, 
+                 is refined by Ant UED Team"
               >
                 <a slot="title" href="https://vue.ant.design/">{{item.title}}</a>
+                ss
               </a-list-item-meta>
             </a-list-item>
           </a-list>
@@ -56,7 +62,8 @@ export default {
         { type: "star-o", text: "156" },
         { type: "like-o", text: "156" },
         { type: "message", text: "2" },
-       
+        { type: "star-o", text: "156" },
+        { type: "like-o", text: "156" }
       ]
     };
   }
@@ -85,6 +92,35 @@ export default {
 }
 .body-left >>> .ant-list-item {
   padding: 20px;
+}
+@media screen and (max-width: 480px) {
+  .body-left >>> .ant-list-vertical .ant-list-item-extra {
+    margin-left: 10px;
+  }
+}
+.body-left >>> .ant-list-vertical .ant-list-item-meta-title {
+  font-size: 18px;
+}
+.body-left >>> .ant-list-item-meta-description {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+.body-left >>> .ant-list-item-action {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+.body-left >>> .ant-list-item-action li {
+  padding-left: 0;
+  padding-right: 10px;
+  margin-right: 10px;
+  margin-bottom: 10px;
+}
+.body-left >>> .ant-list-item-action .ant-list-item-action-split {
+  display: none;
 }
 .body .body-right {
   background-color: #fff;

@@ -10,9 +10,7 @@
             class="head-content-left-menu-item"
             @click="menuClick(item)"
           >
-            <span
-              :class="{'head-content-left-menu-item-active':item===menuCurrent}"
-            >{{item}}</span>
+            <span :class="{'head-content-left-menu-item-active':item===menuCurrent}">{{item}}</span>
           </div>
         </div>
         <div class="head-content-left-action">
@@ -52,7 +50,7 @@ export default {
       //提问按钮显示与否
       quesBtn: true,
       //当前点击的导航菜单
-      menuCurrent: '首页',
+      menuCurrent: "首页",
       //导航菜单
       menus: ["首页", "发现", "等你来答"]
     };
@@ -92,6 +90,7 @@ export default {
   padding: 0 16px;
   height: 52px;
 }
+/*头部左边*/
 .head-content-left {
   display: flex;
 }
@@ -143,8 +142,10 @@ export default {
 .head-content-left-search >>> .ant-input-search-icon {
   font-size: 18px;
 }
+/*提问按钮显示隐藏动画*/
 .head-content-left-question {
   margin-left: 16px;
+  padding: 0 10px;
 }
 .head-content-left-question-enter,
 .head-content-left-question-leave-to {
@@ -154,9 +155,7 @@ export default {
 .head-content-left-question-leave-active {
   transition: all 0.2s;
 }
-.head-content-left-question {
-  padding: 0 10px;
-}
+/*头部右边*/
 .head-content-right {
   display: flex;
   flex: 1;
