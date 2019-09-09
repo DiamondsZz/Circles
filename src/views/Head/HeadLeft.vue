@@ -1,45 +1,31 @@
+<!-- 首页头部左边 -->
 <template>
-  <div class="head">
-    <div class="head-content">
-      <div class="head-content-left">
-        <div class="head-content-left-logo"></div>
-        <div class="head-content-left-menu">
-          <div
-            v-for="(item,i) in menus"
-            :key="i"
-            class="head-content-left-menu-item"
-            @click="menuClick(item)"
-          >
-            <span :class="{'head-content-left-menu-item-active':item===menuCurrent}">{{item}}</span>
-          </div>
-        </div>
-        <div class="head-content-left-action">
-          <a-input-search
-            class="head-content-left-search"
-            :class="{'head-content-left-search-focus':!quesBtn}"
-            @change="search"
-            @focus="focus"
-            @blur="blur"
-          />
-          <transition name="head-content-left-question">
-            <a-button class="head-content-left-question" type="primary" v-if="quesBtn">提问</a-button>
-          </transition>
-        </div>
-
-        <div></div>
-      </div>
-      <div class="head-content-right">
-        <span class="head-content-right-info">
-          <a-icon type="bell" theme="filled" class="head-icon" />
-        </span>
-        <span class="head-content-right-mes">
-          <a-icon type="message" theme="filled" class="head-icon" />
-        </span>
-        <span class="head-content-right-user">
-          <a-avatar icon="user" />
-        </span>
+  <div class="head-content-left">
+    <div class="head-content-left-logo"></div>
+    <div class="head-content-left-menu">
+      <div
+        v-for="(item,i) in menus"
+        :key="i"
+        class="head-content-left-menu-item"
+        @click="menuClick(item)"
+      >
+        <span :class="{'head-content-left-menu-item-active':item===menuCurrent}">{{item}}</span>
       </div>
     </div>
+    <div class="head-content-left-action">
+      <a-input-search
+        class="head-content-left-search"
+        :class="{'head-content-left-search-focus':!quesBtn}"
+        @change="search"
+        @focus="focus"
+        @blur="blur"
+      />
+      <transition name="head-content-left-question">
+        <a-button class="head-content-left-question" type="primary" v-if="quesBtn">提问</a-button>
+      </transition>
+    </div>
+
+    <div></div>
   </div>
 </template>
 
@@ -71,25 +57,11 @@ export default {
       this.menuCurrent = menu;
     }
   },
-
-  created() {}
+  created() {},
+  components: {}
 };
 </script>
-
 <style scoped>
-/*首页头部*/
-.head {
-  min-width: 1000px;
-  background-color: #fff;
-  box-shadow: 0 1px 3px rgba(26, 26, 26, 0.1);
-}
-.head-content {
-  display: flex;
-  width: 1000px;
-  margin: 0 auto;
-  padding: 0 16px;
-  height: 52px;
-}
 /*头部左边*/
 .head-content-left {
   display: flex;
@@ -154,22 +126,5 @@ export default {
 .head-content-left-question-enter-active,
 .head-content-left-question-leave-active {
   transition: all 0.2s;
-}
-/*头部右边*/
-.head-content-right {
-  display: flex;
-  flex: 1;
-  justify-content: flex-end;
-  align-items: center;
-}
-.head-content-right .head-content-right-info,
-.head-content-right .head-content-right-mes,
-.head-content-right .head-content-right-user {
-  margin-left: 40px;
-  cursor: pointer;
-}
-.head-icon {
-  font-size: 22px;
-  color: #8590a6;
 }
 </style>

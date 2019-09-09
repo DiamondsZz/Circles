@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import VueRouter from "./router"
 import App from './App.vue'
 import { Button, Input, Icon, message,Avatar,List,Tabs,Popover } from 'ant-design-vue'
 import 'ant-design-vue/dist/antd.css'
@@ -16,5 +17,6 @@ Vue.use(Popover);
 Vue.prototype.$message = message;
 
 new Vue({
+  router:VueRouter,
   render: h => h(App),
 }).$mount('#app')
