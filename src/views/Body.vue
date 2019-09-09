@@ -44,6 +44,7 @@
 export default {
   data() {
     return {
+      isLikeVisible: false,
       data: [
         {
           title: "Ant Design Title 1",
@@ -52,22 +53,25 @@ export default {
           media:
             "https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png",
           like: 23,
-          user: { likeStatus: false, disLikeStatus: false },
+          user: { likeStatus: true, disLikeStatus: false },
           dislike: 4,
           message: 28
         },
         {
           title: "Ant Design Title 2",
+          user: { likeStatus: true, disLikeStatus: false },
           description:
             "Ant Design, a design language for background applications, is refined by Ant UED TeamAnt DesignAnt Design, a design language for background applications, is refined by Ant UED TeamAnt DesignAnt Design, a design language for background applications, is refined by Ant UED TeamAnt DesignAnt Design, a design language for background applications, is refined by Ant UED TeamAnt DesignAnt Design, a design language for background applications, is refined by Ant UED TeamAnt Design"
         },
         {
           title: "Ant Design Title 3",
+          user: { likeStatus: true, disLikeStatus: false },
           description:
             "Ant Design, a design language for background applications, is refined by Ant UED TeamAnt Design"
         },
         {
           title: "Ant Design Title 4",
+          user: { likeStatus: true, disLikeStatus: false },
           description:
             "Ant Design, a design language for background applications, is refined by Ant UED TeamAnt Design"
         }
@@ -76,8 +80,11 @@ export default {
   },
   methods: {
     likeClick(item) {
-      item.like++;
-      console.log(item);
+      if (item.user.likeStatus) {
+        this.$message.error("你已经点过赞了哦！");
+      } else {
+        item.like++;
+      }
     }
   }
 };
