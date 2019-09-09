@@ -1,22 +1,22 @@
 <!--首页内容-->
 <template>
   <div class="body">
-    <body-left></body-left>
-    <body-right></body-right>
+    <index-left></index-left>
+    <index-right></index-right>
   </div>
 </template>
 
 <script>
-import BodyLeft from "./BodyLeft";
-import BodyRight from "./BodyRight";
+import IndexLeft from "./IndexLeft";
+import IndexRight from "./IndexRight";
 export default {
   data() {
     return {};
   },
   methods: {},
   components: {
-    BodyLeft,
-    BodyRight
+    IndexLeft,
+    IndexRight
   }
 };
 </script>

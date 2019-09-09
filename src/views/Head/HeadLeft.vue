@@ -42,6 +42,10 @@ export default {
     };
   },
   methods: {
+    //路由调用
+    router(path) {
+      this.$router.push(path);
+    },
     //搜索框进行搜索
     search() {},
     //搜索框聚焦
@@ -55,6 +59,19 @@ export default {
     //点击导航菜单选项
     menuClick(menu) {
       this.menuCurrent = menu;
+      switch (menu) {
+        case "首页":
+          this.router("/");
+          break;
+        case "发现":
+          this.router("/find");
+          break;
+        case "等你来答":
+          this.router("/answer");
+          break;
+        default:
+          this.router("/");
+      }
     }
   },
   created() {},
