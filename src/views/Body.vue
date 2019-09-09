@@ -6,7 +6,7 @@
           <a-list itemLayout="vertical" :dataSource="recomData" :locale="{emptyText: '暂无数据'}">
             <a-list-item slot="renderItem" slot-scope="item">
               <a-list-item-meta :description="item.description">
-                <a slot="title" href="https://vue.ant.design/">{{item.title}}</a>
+                <a slot="title" href>{{item.title}}</a>
               </a-list-item-meta>
               <template slot="actions">
                 <span>
@@ -91,14 +91,14 @@ export default {
           description:
             "赫连谁谁： 好久不玩这个游戏了，今天看了个视频突然有点想玩一把，哈哈哈",
           media:
-            "https://pic3.zhimg.com/v2-3b057504c1413b56bdb4aa0340ee0dee_400x224.jpg",
+            "https://pic1.zhimg.com/50/v2-680c3cb36c5cdd557537336cd0b01e48_400x224.jpg",
           like: 23,
           user: { likeStatus: true, disLikeStatus: false },
           dislike: 4,
           message: 28
         },
         {
-          title: "跳绳才是减脂大杀器！你得这么跳……",
+          title: "跳绳才是减脂大杀器！你得这么跳",
           description:
             "左菲约瘦： 跳绳，是大家再熟悉不过的运动，然而，跳了那么久，你跳绳的动作真的正确吗？想要减脂，跳绳好还是跑步好？跳绳会不会让小腿变粗呢？今天，小乐就来给大家一一解答。 图片版权归乐动力所有 跳绳 vs 跑步",
           media:
@@ -225,8 +225,8 @@ export default {
   font-size: 16px;
   color: #444;
 }
-.body-right-write-later{
-  border-bottom: 1px solid #f0f2f7
+.body-right-write-later {
+  border-bottom: 1px solid #f0f2f7;
 }
 .body-right-write-later,
 .body-right-write-draft {
