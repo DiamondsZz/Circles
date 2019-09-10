@@ -24,8 +24,6 @@
         <a-button class="head-content-left-question" type="primary" v-if="quesBtn">提问</a-button>
       </transition>
     </div>
-
-    <div></div>
   </div>
 </template>
 

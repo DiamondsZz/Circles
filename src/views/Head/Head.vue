@@ -1,11 +1,11 @@
 <!--首页头部-->
 <template>
-  <div class="head">
+  <div class="head" :class="{'head-fixed':fixedTop}">
     <div class="head-content" :class="{'up-scroll':downScroll}">
       <head-left></head-left>
       <head-right></head-right>
     </div>
-    <div class="head-details" :class="{'down-scroll':downScroll}" >
+    <div class="head-details" :class="{'down-scroll':downScroll}">
       <div class="head-details-til">从你的经历来看，什么时候感到做一个中国人很幸福？</div>
       <div class="head-details-btn">
         <a-button class="head-details-btn-item" type="primary">关注问题</a-button>
@@ -19,17 +19,22 @@
 import HeadLeft from "./HeadLeft";
 import HeadRight from "./HeadRight";
 export default {
-  props: ["isScrollDown"],
+  //isScrollDown:鼠标滑轮是否向下滑动
+  //isFixedTop:头部是否固定
+  props: ["isScrollDown", "isFixedTop"],
   data() {
     return {
-      downScroll: false
+      downScroll: false,
+      fixedTop: false
     };
   },
   methods: {},
   watch: {
     isScrollDown(downScroll) {
-      console.log(downScroll);
       this.downScroll = downScroll;
+    },
+    isFixedTop(fixedTop) {
+      this.fixedTop = fixedTop;
     }
   },
   created() {},
@@ -46,6 +51,13 @@ export default {
   min-width: 1000px;
   background-color: #fff;
   box-shadow: 0 1px 3px rgba(26, 26, 26, 0.1);
+  height: 52px;
+  overflow: hidden;
+}
+.head-fixed {
+  position: fixed;
+  top: 0;
+  left: 0;
 }
 .head-content {
   display: flex;
@@ -65,12 +77,6 @@ export default {
   align-items: center;
   transition: transform 1.3s;
 }
-.down-scroll {
-  transform: translateY(-100%);
-}
-.up-scroll {
-  transform: translateY(100%);
-}
 .head-details .head-details-til {
   font-size: 22px;
   font-weight: 600;
@@ -81,5 +87,12 @@ export default {
 }
 .head-details-btn .head-details-btn-item {
   margin: 0 8px;
+}
+/*鼠标滑轮滚动事件*/
+.down-scroll {
+  transform: translateY(-100%);
+}
+.up-scroll {
+  transform: translateY(100%);
 }
 </style>
