@@ -92,7 +92,6 @@ export default {
     },
     //查看文章详情
     showDetails(item) {
-      console.log(item);
       this.router("/details");
     },
     //赞
