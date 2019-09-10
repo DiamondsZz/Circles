@@ -3,8 +3,10 @@ import VueRouter from "vue-router"
 
 
 
-import Index from "../views/Body/Index.vue"
-import Body from "../views/Body/Body.vue"
+import Index from "../views/Index/Index.vue"
+import IndexBody from "../views/Body/IndexBody/Index.vue"
+import FindBody from "../views/Body/FindBody/Index.vue"
+import AnswerBody from "../views/Body/AnswerBody/Index.vue"
 import Details from "../views/Details/Index.vue"
 
 
@@ -16,11 +18,19 @@ export default new VueRouter({
         children: [
             {
                 path: '/',
-                component: Body,
+                component: IndexBody,
             },
             {
-                path: '/details',
-                component: Details,
-            }]
+                path: '/find',
+                component: FindBody,
+            },
+            {
+                path: '/answer',
+                component: AnswerBody,
+            },
+        ]
+    }, {
+        path: '/details',
+        component: Details,
     }]
 })
