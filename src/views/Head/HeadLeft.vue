@@ -31,12 +31,12 @@
 export default {
   data() {
     return {
-      //当前路由的路径
-      routeName: this.$route.meta.name,
+      //当前导航菜单
+      menuCurrent: this.$route.meta.name,//初始值为当前激活路由的元信息name。（组件创建时进行当前菜单选项的初始化）   
       //提问按钮显示与否
       quesBtn: true,
       //导航菜单
-      menus: ["首页","发现","等你来答"]
+      menus: ["首页", "发现", "等你来答"]
     };
   },
   methods: {
@@ -72,16 +72,13 @@ export default {
       }
     }
   },
-
-  computed: {
-    //当前导航菜单选项
-    menuCurrent() {
-      return this.routeName;
+  watch: {
+    //监听同级路由状态信息 （同级路由改变时进行当前菜单选项的切换）
+    $route() {
+      this.menuCurrent=this.$route.meta.name;
     }
   },
-  created() {
-    //console.log(this);
-  },
+  created() {},
   components: {}
 };
 </script>

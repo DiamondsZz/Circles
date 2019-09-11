@@ -28,7 +28,7 @@ export default new VueRouter({
                 component: FindBody,
                 meta: {
                     name: "发现"
-                }
+                },
             },
             {
                 path: '/answer',
