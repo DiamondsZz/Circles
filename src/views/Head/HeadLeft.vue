@@ -31,10 +31,10 @@
 export default {
   data() {
     return {
+      //当前导航菜单
+      menuCurrent: this.$route.meta.name,//初始值为当前激活路由的元信息name。（组件创建时进行当前菜单选项的初始化）   
       //提问按钮显示与否
       quesBtn: true,
-      //当前点击的导航菜单
-      menuCurrent: "首页",
       //导航菜单
       menus: ["首页", "发现", "等你来答"]
     };
@@ -54,7 +54,7 @@ export default {
     blur() {
       this.quesBtn = true;
     },
-    //点击导航菜单选项
+
     menuClick(menu) {
       this.menuCurrent = menu;
       switch (menu) {
@@ -70,6 +70,12 @@ export default {
         default:
           this.router("/");
       }
+    }
+  },
+  watch: {
+    //监听同级路由状态信息 （同级路由改变时进行当前菜单选项的切换）
+    $route() {
+      this.menuCurrent=this.$route.meta.name;
     }
   },
   created() {},

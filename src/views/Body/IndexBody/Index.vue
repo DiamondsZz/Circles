@@ -14,6 +14,7 @@ export default {
     return {};
   },
   methods: {},
+  created() {},
   components: {
     IndexLeft,
     IndexRight

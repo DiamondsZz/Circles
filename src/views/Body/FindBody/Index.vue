@@ -10,6 +10,7 @@ export default {
   },
   methods: {},
   created() {},
+
   components: {}
 };
 </script>

@@ -2,6 +2,7 @@
 <template>
   <div class="details" @wheel="wheel">
     <circles-head :isScrollDown="isScrollDown" :isFixedTop="isFixedTop"></circles-head>
+    <router-view></router-view>
   </div>
 </template>
 
@@ -42,9 +43,8 @@ export default {
       };
     }
   },
-  created() {
-    console.log(this)
-  },
+ 
+  created() {},
   mounted() {
     this.scroll();
   },
