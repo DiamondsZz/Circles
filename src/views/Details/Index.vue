@@ -2,15 +2,21 @@
 <template>
   <div class="details" @wheel="wheel">
     <circles-head :isScrollDown="isScrollDown" :isFixedTop="isFixedTop"></circles-head>
-    <router-view></router-view>
+    <details-body></details-body>
   </div>
 </template>
 
 <script>
 import CirclesHead from "../Head/Head";
+import DetailsBody from "./Body";
 export default {
   data() {
-    return { isScrollDown: false, isFixedTop: false };
+    return {
+      //鼠标滑轮是否向下滚动
+      isScrollDown: false,
+      //头部是否吸顶
+      isFixedTop: false
+    };
   },
   methods: {
     //鼠标滑轮滚动事件
@@ -43,12 +49,12 @@ export default {
       };
     }
   },
- 
+
   created() {},
   mounted() {
     this.scroll();
   },
-  components: { CirclesHead }
+  components: { CirclesHead, DetailsBody }
 };
 </script>
 <style scoped>

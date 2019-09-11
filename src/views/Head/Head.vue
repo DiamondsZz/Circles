@@ -55,6 +55,7 @@ export default {
   overflow: hidden;
 }
 .head-fixed {
+  width: 100%;
   position: fixed;
   top: 0;
   left: 0;
