@@ -31,12 +31,12 @@
 export default {
   data() {
     return {
+      //当前路由的路径
+      routeName: this.$route.meta.name,
       //提问按钮显示与否
       quesBtn: true,
-      //当前点击的导航菜单
-      menuCurrent: "首页",
       //导航菜单
-      menus: ["首页", "发现", "等你来答"]
+      menus: ["首页","发现","等你来答"]
     };
   },
   methods: {
@@ -54,7 +54,7 @@ export default {
     blur() {
       this.quesBtn = true;
     },
-    //点击导航菜单选项
+
     menuClick(menu) {
       this.menuCurrent = menu;
       switch (menu) {
@@ -72,7 +72,16 @@ export default {
       }
     }
   },
-  created() {},
+
+  computed: {
+    //当前导航菜单选项
+    menuCurrent() {
+      return this.routeName;
+    }
+  },
+  created() {
+    //console.log(this);
+  },
   components: {}
 };
 </script>

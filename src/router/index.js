@@ -19,14 +19,23 @@ export default new VueRouter({
             {
                 path: '/',
                 component: IndexBody,
+                meta: {
+                    name: "首页"
+                }
             },
             {
                 path: '/find',
                 component: FindBody,
+                meta: {
+                    name: "发现"
+                }
             },
             {
                 path: '/answer',
                 component: AnswerBody,
+                meta: {
+                    name: "等你来答"
+                }
             },
         ]
     }, {
