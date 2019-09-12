@@ -5,6 +5,7 @@
       <head-left></head-left>
       <head-right></head-right>
     </div>
+
     <div class="head-details" :class="{'down-scroll':downScroll}">
       <div class="head-details-til">从你的经历来看，什么时候感到做一个中国人很幸福？</div>
       <div class="head-details-btn">
@@ -48,6 +49,7 @@ export default {
 <style scoped>
 /*首页头部*/
 .head {
+  position: relative;
   min-width: 1000px;
   background-color: #fff;
   box-shadow: 0 1px 3px rgba(26, 26, 26, 0.1);

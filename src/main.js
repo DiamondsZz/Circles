@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import VueRouter from "./router"
 import App from './App.vue'
-import { Button, Input, Icon, message,Avatar,List,Tabs,Popover } from 'ant-design-vue'
+import { Button, Input, Icon, message,Avatar,List,Tabs,Popover,Tag} from 'ant-design-vue'
 import 'ant-design-vue/dist/antd.css'
 import "./assets/css//public.css"
 
@@ -16,6 +16,7 @@ Vue.use(Avatar);
 Vue.use(List);
 Vue.use(Tabs);
 Vue.use(Popover);
+Vue.use(Tag);
 Vue.prototype.$message = message;
 
 new Vue({
