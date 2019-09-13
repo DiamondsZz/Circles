@@ -1,16 +1,11 @@
 <template>
   <div id="app">
-    <CirclesHead></CirclesHead>
-    <CirclesBody></CirclesBody>
+    <router-view></router-view>
   </div>
 </template>
-
 <script>
-import CirclesHead from "./views/Head";
-import CirclesBody from "./views/Body";
 export default {
   name: "app",
-  components: { CirclesHead, CirclesBody }
 };
 </script>
 
