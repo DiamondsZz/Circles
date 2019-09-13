@@ -75,8 +75,10 @@
           </span>
           <span class="body-right-write-draft-text">我的草稿</span>
         </div>
+        
       </div>
     </div>
+    
   </div>
 </template>
 
@@ -183,6 +185,10 @@ export default {
 }
 .body-left .body-left-actions-icon {
   margin-right: 4px;
+  color: #8590a6;
+}
+.body-left .body-left-actions-icon:hover{
+  color:#646464;
 }
 .body-left >>> .ant-list-item-action {
   margin-left: 0;
@@ -225,8 +231,8 @@ export default {
   font-size: 16px;
   color: #444;
 }
-.body-right-write-later{
-  border-bottom: 1px solid #f0f2f7
+.body-right-write-later {
+  border-bottom: 1px solid #f0f2f7;
 }
 .body-right-write-later,
 .body-right-write-draft {
