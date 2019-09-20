@@ -13,13 +13,13 @@ export default {
   props: ["isFixedTop"],
   data() {
     return {
-      isFixedTop: false
+      isFixed: false
     };
   },
   methods: {},
   watch: {
     isFixedTop(isFixedTop) {
-      this.isFixedTop = isFixedTop;
+      this.isFixed = isFixedTop;
     }
   },
   created() {},
@@ -27,9 +27,6 @@ export default {
 };
 </script>
 <style scoped>
-.details-body {
-  background-color: #fff;
-}
 /*头部吸顶*/
 .is-fixed-top {
   margin-top: 69px; /*滚动条宽度17px*/

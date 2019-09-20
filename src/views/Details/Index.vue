@@ -39,7 +39,7 @@ export default {
 
     //滚动条事件
     scroll() {
-      //顶部滚动高度                     //窗口高度    //滚动内容高度
+      //顶部滚动高度   //窗口高度    //滚动内容高度
       let scrollTop, clientHeight, scrollHeight;
       window.onscroll = e => {
         this.scrollTopCurrent =
