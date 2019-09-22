@@ -21,9 +21,42 @@
         @blur="blur"
       />
       <transition name="head-content-left-question">
-        <a-button class="head-content-left-question" type="primary" v-if="quesBtn">提问</a-button>
+        <a-button
+          class="head-content-left-question"
+          type="primary"
+          v-if="quesBtn"
+          @click="question"
+        >提问</a-button>
       </transition>
     </div>
+
+    <a-modal
+      :visible="questionModal"
+      :centered="true"
+      :closable="false"
+      :footer="null"
+      @cancel="questionModal=false"
+    >
+      <div class="ques-til">
+        <div class="ques-til-l">
+          <img src="https://pic2.zhimg.com/ebba3f748_xs.jpg" alt />
+        </div>
+        <div class="ques-til-r">
+          <div class="ques-til-inp">
+            <textarea></textarea>
+          </div>
+          <div class="ques-til-mes">至少输入4个字</div>
+        </div>
+      </div>
+      <div class="ques-des">
+        <quill-editor></quill-editor>
+      </div>
+      <div class="ques-rel"></div>
+      <div class="ques-foot">
+        <a-checkbox>匿名提问</a-checkbox>
+        <a-button class="ques-btn" type="primary" @click="questionSend">发布问题</a-button>
+      </div>
+    </a-modal>
   </div>
 </template>
 
@@ -32,11 +65,12 @@ export default {
   data() {
     return {
       //当前导航菜单
-      menuCurrent: this.$route.meta.name,//初始值为当前激活路由的元信息name。（组件创建时进行当前菜单选项的初始化）   
+      menuCurrent: this.$route.meta.name, //初始值为当前激活路由的元信息name。（组件创建时进行当前菜单选项的初始化）
       //提问按钮显示与否
       quesBtn: true,
       //导航菜单
-      menus: ["首页", "发现", "等你来答"]
+      menus: ["首页", "发现", "等你来答"],
+      questionModal: false
     };
   },
   methods: {
@@ -55,6 +89,7 @@ export default {
       this.quesBtn = true;
     },
 
+    //头部菜单点击
     menuClick(menu) {
       this.menuCurrent = menu;
       switch (menu) {
@@ -70,12 +105,18 @@ export default {
         default:
           this.router("/");
       }
-    }
+    },
+    //点击头部菜单提问按钮
+    question() {
+      this.questionModal = true;
+    },
+    //提问内容提交
+    questionSend() {}
   },
   watch: {
     //监听同级路由状态信息 （同级路由改变时进行当前菜单选项的切换）
     $route() {
-      this.menuCurrent=this.$route.meta.name;
+      this.menuCurrent = this.$route.meta.name;
     }
   },
   created() {},
@@ -147,5 +188,49 @@ export default {
 .head-content-left-question-enter-active,
 .head-content-left-question-leave-active {
   transition: all 0.2s;
+}
+
+/*提问窗口*/
+.ques-foot {
+  display: flex;
+  justify-content: space-between;
+}
+.ques-til {
+  height: 64px;
+  display: flex;
+  margin-bottom: 10px;
+}
+.ques-til .ques-til-l {
+  flex-shrink: 0;
+  margin-right: 10px;
+}
+.ques-til .ques-til-l img {
+  width: 40px;
+  height: 40px;
+}
+.ques-til .ques-til-r {
+  flex-grow: 1;
+}
+.ques-til .ques-til-r .ques-til-inp {
+  height: 40px;
+}
+.ques-til .ques-til-r .ques-til-inp textarea {
+  width: 100%;
+  height: 100%;
+  padding: 5px;
+  outline: none;
+  border: none;
+  resize: none;
+  font-size: 16px;
+  color: #1a1a1a;
+}
+.ques-til .ques-til-r .ques-til-mes {
+  min-height: 24px;
+  color: #f1403c;
+  font-size: 15px;
+  text-align: right;
+}
+.ques-des {
+  margin: 10px 0;
 }
 </style>

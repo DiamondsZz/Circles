@@ -12,7 +12,7 @@
       <div class="left-body-item">
         <div class="left-body-user">
           <span class="left-body-user-img">
-            <img src="https://pic3.zhimg.com/v2-c5f36eeb6a86c774a0b8a6d1e5128334_xs.jpg" alt />
+            <img src="https://pic2.zhimg.com/ebba3f748_xs.jpg" alt />
           </span>
           <div class="left-body-user-text">
             <div class="left-body-user-name">Shawn Tsien</div>
