@@ -45,7 +45,7 @@
           <div class="ques-til-inp">
             <textarea></textarea>
           </div>
-          <div class="ques-til-mes">至少输入4个字</div>
+          <div class="ques-til-mes">至少输入4个字!</div>
         </div>
       </div>
       <div class="ques-des">
