@@ -53,7 +53,7 @@
       </div>
       <div class="ques-rel"></div>
       <div class="ques-foot">
-        <a-checkbox>匿名提问mmmm</a-checkbox>
+        <a-checkbox>匿名提问</a-checkbox>
         <a-button class="ques-btn" type="primary" @click="questionSend">发布问题</a-button>
       </div>
     </a-modal>
