@@ -35,6 +35,7 @@
       :centered="true"
       :closable="false"
       :footer="null"
+      width="640"
       @cancel="questionModal=false"
     >
       <div class="ques-til">
@@ -43,13 +44,20 @@
         </div>
         <div class="ques-til-r">
           <div class="ques-til-inp">
-            <textarea></textarea>
+            <a-textarea
+              v-model="quesTil"
+              placeholder="写下你的问题，准确地描述问题更容易得到解答"
+              @change="quesTilChange"
+            ></a-textarea>
           </div>
-          <div class="ques-til-mes">至少输入4个字!</div>
+          <div
+            class="ques-til-mes"
+            :class="{'ques-til-mes-color':quesTil.length>=40&&quesTil.length<50}"
+          >{{quesTip}}</div>
         </div>
       </div>
-      <div class="ques-des">
-        <quill-editor></quill-editor>
+      <div class="ques-des" v-if="quesTil!==''">
+        <editor class="editor" :isClickEditor="isClickEditor" @editorContent="getEditorContent"></editor>
       </div>
       <div class="ques-rel"></div>
       <div class="ques-foot">
@@ -61,6 +69,7 @@
 </template>
 
 <script>
+import Editor from "../../components/Editor";
 export default {
   data() {
     return {
@@ -70,7 +79,11 @@ export default {
       quesBtn: true,
       //导航菜单
       menus: ["首页", "发现", "等你来答"],
-      questionModal: false
+      questionModal: false,
+      quesTil: "",
+      quesTip: "",
+      isClickEditor: false,
+      quesContent: ""
     };
   },
   methods: {
@@ -110,8 +123,35 @@ export default {
     question() {
       this.questionModal = true;
     },
+    //问题输入框内容改变
+    quesTilChange() {
+      if (this.quesTil.length < 4) {
+        this.quesTip = "至少输入4个字";
+      } else if (this.quesTil.length <= 50) {
+        this.quesTip = "";
+        if (this.quesTil.length > 40) {
+          this.quesTip = `还可以输入${50 - this.quesTil.length}个字`;
+        }
+      } else if (this.quesTil.length > 50) {
+        this.quesTip = `已超出${this.quesTil.length - 50}个字`;
+      } else if (this.quesTil.length > 80) {
+        this.quesTip = "最多输入50个字";
+      }
+    },
+
     //提问内容提交
-    questionSend() {}
+    async questionSend() {
+      this.isClickEditor = !this.isClickEditor; //监听编辑器的状态   是否点击发布问题按钮
+      console.log(this.quesTil);
+      await this.getEditorContent(); //直到获取编辑器最新内容更新才执行下一步
+      console.log(this.quesContent);
+      //this.questionModal = false;
+    },
+
+    //获取编辑器返回的文本内容
+    getEditorContent(content) {
+      this.quesContent = content;
+    }
   },
   watch: {
     //监听同级路由状态信息 （同级路由改变时进行当前菜单选项的切换）
@@ -120,7 +160,7 @@ export default {
     }
   },
   created() {},
-  components: {}
+  components: { Editor }
 };
 </script>
 <style scoped>
@@ -191,6 +231,7 @@ export default {
 }
 
 /*提问窗口*/
+
 .ques-foot {
   display: flex;
   justify-content: space-between;
@@ -225,12 +266,21 @@ export default {
   color: #1a1a1a;
 }
 .ques-til .ques-til-r .ques-til-mes {
+  margin: 5px 0;
   min-height: 24px;
   color: #f1403c;
   font-size: 15px;
   text-align: right;
 }
+.ques-til .ques-til-r .ques-til-mes-color {
+  color: #8590a6;
+}
 .ques-des {
   margin: 10px 0;
+}
+
+/*编辑器*/
+.editor >>> .ql-container {
+  height: 200px;
 }
 </style>

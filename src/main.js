@@ -1,22 +1,14 @@
 import Vue from 'vue'
 import VueRouter from "./router"
 import App from './App.vue'
-
-import QuillEditor from "vue-quill-editor"
-
 import { Button, Input, Icon, message, Avatar, List, Tabs, Popover, Tag, Modal, Checkbox } from 'ant-design-vue'
-
-
-import 'quill/dist/quill.snow.css'
-
 import 'ant-design-vue/dist/antd.css'
-
 import "./assets/css/public.css"
 
 
 Vue.config.productionTip = false
 
-Vue.use(QuillEditor);
+
 Vue.use(Button);
 Vue.use(Input);
 Vue.use(Icon);
