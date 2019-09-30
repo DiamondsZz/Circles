@@ -35,7 +35,7 @@
       :centered="true"
       :closable="false"
       :footer="null"
-      width="640"
+      :width="650"
       @cancel="questionModal=false"
     >
       <div class="ques-til">
@@ -56,9 +56,11 @@
           >{{quesTip}}</div>
         </div>
       </div>
-      <div class="ques-des" v-if="quesTil!==''">
-        <editor class="editor" :isClickEditor="isClickEditor" @editorContent="getEditorContent"></editor>
-      </div>
+      <transition name="ques-des">
+        <div class="ques-des" v-if="quesTil!==''">
+          <editor class="editor" :isClickEditor="isClickEditor" @editorContent="getEditorContent"></editor>
+        </div>
+      </transition>
       <div class="ques-rel"></div>
       <div class="ques-foot">
         <a-checkbox>匿名提问</a-checkbox>
@@ -231,7 +233,6 @@ export default {
 }
 
 /*提问窗口*/
-
 .ques-foot {
   display: flex;
   justify-content: space-between;
@@ -280,6 +281,7 @@ export default {
 }
 
 /*编辑器*/
+
 .editor >>> .ql-container {
   height: 200px;
 }

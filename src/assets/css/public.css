@@ -1,13 +1,14 @@
-body{
+body {
     background-color: #f6f6f6;
-    color:#1a1a1a;
+    color: #1a1a1a;
 }
-@media (max-width:768px){
-    #circles .ant-modal{
-      width:640px !important;
-      position: absolute;
-      top: 50%;
-      left:0;
-      transform: translateY(-50%)
+
+@media (max-width:768px) {
+    #circles .ant-modal {
+        width: 650px !important;
+        position: absolute;
+        top: 50%;
+        left: 0;
+        transform: translateY(-50%)
     }
 }

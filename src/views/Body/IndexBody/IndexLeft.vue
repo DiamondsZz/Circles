@@ -24,7 +24,7 @@
               </span>
               <span>
                 <a-icon type="message" class="body-left-actions-icon" theme="filled" />
-                {{item.message}}条评论
+                <span>{{item.message}}条评论</span>
               </span>
               <span>
                 <a-icon type="rocket" class="body-left-actions-icon" theme="filled" />分享
@@ -58,7 +58,8 @@ export default {
           like: 23,
           user: { likeStatus: true, disLikeStatus: false },
           dislike: 4,
-          message: 28
+          message: 28,
+          isShowComment: true
         },
         {
           title: "跳绳才是减脂大杀器！你得这么跳",
@@ -69,18 +70,8 @@ export default {
           like: 3,
           user: { likeStatus: false, disLikeStatus: false },
           dislike: 24,
-          message: 2
-        },
-        {
-          title: "为什么说不抽烟不喝酒的男人才最可怕？",
-          description:
-            "关心心： 我老公，不抽烟不喝酒不打游戏自从我怀孕之后也“戒色”了 医院工作，上班时间固定，下了班就回家，没在外面多逗留过一分钟… 对我照顾的比我妈都周到，永远给我带着水杯铃着包，可能有人觉得他娘了，可是他是",
-          media:
-            "https://pic1.zhimg.com/50/v2-680c3cb36c5cdd557537336cd0b01e48_400x224.jpg",
-          like: 123,
-          user: { likeStatus: false, disLikeStatus: false },
-          dislike: 48,
-          message: 2899
+          message: 2,
+          isShowComment: true
         }
       ]
     };
@@ -115,6 +106,7 @@ export default {
 }
 .body-left >>> .ant-tabs-ink-bar {
   display: none !important;
+  margin: 0;
 }
 .body-left >>> .ant-list-item-main {
   display: flex;

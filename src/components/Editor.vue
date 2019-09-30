@@ -1,4 +1,4 @@
-
+<!--富文本编辑器-->
 <template>
   <div class>
     <quill-editor :options="options" v-model="content"></quill-editor>

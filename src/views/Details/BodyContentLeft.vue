@@ -39,8 +39,10 @@
             <a-button class="left-body-actions-up" icon="caret-up">赞同 4</a-button>
             <a-button class="left-body-actions-down" icon="caret-down"></a-button>
           </span>
-          <span class="left-body-actions-item left-body-actions-text">
-            <a-icon class="left-body-actions-icon" type="message" />24 条评论
+          <span class="left-body-actions-item left-body-actions-text" @click="showComment">
+            <a-icon class="left-body-actions-icon" type="message" />
+            <span v-if="details.isShowComment">24条评论</span>
+            <span v-else>收起评论</span>
           </span>
           <span class="left-body-actions-item left-body-actions-text">
             <a-icon class="left-body-actions-icon" type="rocket" />分享
@@ -49,19 +51,30 @@
             <a-icon class="left-body-actions-icon" type="star" />收藏
           </span>
         </div>
+        <comment></comment>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import Comment from "@/components/Comment";
 export default {
   data() {
-    return {};
+    return {
+      details: {
+        isShowComment: true
+      }
+    };
   },
-  methods: {},
+  methods: {
+    //查看评论
+    showComment() {
+      this.$set(this.details, "isShowComment", !this.details.isShowComment);
+    }
+  },
   created() {},
-  components: {}
+  components: { Comment }
 };
 </script>
 <style scoped>
@@ -97,12 +110,7 @@ export default {
 .left-body-item {
   padding: 16px 20px;
 }
-.left-body-item::after {
-  display: inline-block;
-  width: 100%;
-  content: "";
-  border-bottom: 1px solid #f6f6f6;
-}
+
 .left-body .left-body-user {
   display: flex;
   align-items: center;
@@ -133,40 +141,10 @@ export default {
   line-height: 24px;
 
   /* 遮罩层 */
-  position: relative;
-  -webkit-transition: max-height 0.32s cubic-bezier(0.95, 0.05, 0.795, 0.035),
-    -webkit-mask-size 0.22s cubic-bezier(0.95, 0.05, 0.795, 0.035);
-  transition: max-height 0.32s cubic-bezier(0.95, 0.05, 0.795, 0.035),
-    -webkit-mask-size 0.22s cubic-bezier(0.95, 0.05, 0.795, 0.035);
-  transition: mask-size 0.22s cubic-bezier(0.95, 0.05, 0.795, 0.035),
-    max-height 0.32s cubic-bezier(0.95, 0.05, 0.795, 0.035);
-  transition: mask-size 0.22s cubic-bezier(0.95, 0.05, 0.795, 0.035),
-    max-height 0.32s cubic-bezier(0.95, 0.05, 0.795, 0.035),
-    -webkit-mask-size 0.22s cubic-bezier(0.95, 0.05, 0.795, 0.035);
-  -webkit-mask-image: -webkit-gradient(
-    linear,
-    left top,
-    left bottom,
-    from(#1a1a1a),
-    to(transparent)
-  );
-  -webkit-mask-image: linear-gradient(
-    #1a1a1a calc(100% - 8rem),
-    transparent calc(100% - 2.8rem)
-  );
-  mask-image: -webkit-gradient(
-    linear,
-    left top,
-    left bottom,
-    from(#1a1a1a),
-    to(transparent)
-  );
   mask-image: linear-gradient(
     #1a1a1a calc(100% - 8rem),
     transparent calc(100% - 2.8rem)
   );
-  -webkit-mask-size: 100% 100%;
-  mask-size: 100% 100%;
 }
 .left-body .left-body-expand {
   color: #175199;
