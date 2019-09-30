@@ -116,6 +116,10 @@
         </div>
       </div>
     </div>
+    <div class="comment-foot">
+      <div class="comment-foot-page"></div>
+      <div class="comment-foot-input"></div>
+    </div>
   </div>
 </template>
 
@@ -377,4 +381,6 @@ export default {
 .comment-body-item-inp-btn-leave-active {
   transition: all 0.2s;
 }
+
+/*评论底部*/
 </style>
