@@ -139,12 +139,8 @@ export default {
 }
 .left-body .left-body-content {
   line-height: 24px;
-
   /* 遮罩层 */
-  mask-image: linear-gradient(
-    #1a1a1a calc(100% - 8rem),
-    transparent calc(100% - 2.8rem)
-  );
+  mask-image: linear-gradient(#000, transparent);
 }
 .left-body .left-body-expand {
   color: #175199;

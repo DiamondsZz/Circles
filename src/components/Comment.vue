@@ -117,7 +117,14 @@
       </div>
     </div>
     <div class="comment-foot">
-      <div class="comment-foot-page"></div>
+      <div class="comment-foot-page">
+        <a-pagination
+          :current="currentPage"
+          :total="total"
+          :pageSize="pageSize"
+          @change="pageChange()"
+        />
+      </div>
       <div class="comment-foot-input"></div>
     </div>
   </div>
@@ -127,6 +134,9 @@
 export default {
   data() {
     return {
+      currentPage: 1,
+      total: 12,
+      pageSize: 4,
       //评论列表内容
       comment: [
         {
@@ -249,7 +259,9 @@ export default {
     //鼠标离开评论区域
     out(item) {
       this.$set(item, "isHover", false);
-    }
+    },
+    //页面切换
+    pageChange(page, pageSize) {}
   },
   created() {},
   components: {}
@@ -383,4 +395,9 @@ export default {
 }
 
 /*评论底部*/
+.comment-foot-page{
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+}
 </style>
