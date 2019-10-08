@@ -21,7 +21,7 @@
         </div>
         <div class="left-body-person">{{item.like}}人赞同了该回答</div>
         <div class="left-body-content">{{item.text}}</div>
-        <div class="left-body-expand">
+        <div class="left-body-expand" @click="expandText(item)" v-if="!item.isExpandText">
           展开阅读全文
           <a-icon type="down" />
         </div>
@@ -34,7 +34,7 @@
           <span class="left-body-actions-item left-body-actions-text" @click="showComment(item)">
             <a-icon class="left-body-actions-icon" type="message" />
             <span v-if="item.isShowComment">收起评论</span>
-            <span v-else>24条评论</span>
+            <span v-else>{{item.total}}条评论</span>
           </span>
           <span class="left-body-actions-item left-body-actions-text">
             <a-icon class="left-body-actions-icon" type="rocket" />分享
@@ -174,7 +174,8 @@ export default {
             like: 222,
             text:
               "你举的例子，依然都还是扯谈，虽然似乎呈现在眼前了，但实际与当初吹嘘的效果差别很大。我已经得出一条屡试不爽的规律：凡是让我惊讶的新技术、新发现，都是吹牛，尤其是出现在中国的。如果文章的标题有“美国人慌了”、“全世界震惊”、“突然宣布”、“懵了”等字眼，这些文章根本不用点开。",
-            time: "昨天 22:20"
+            time: "昨天 22:20",
+            isExpandText: false
           }
         ]
       }
@@ -184,8 +185,12 @@ export default {
     //展开评论
     showComment(item) {
       this.$set(item, "isShowComment", !item.isShowComment);
+    },
+    expandText(item) {
+      this.$set(item, "isExpandText", !item.isExpandText);
     }
   },
+
   created() {},
   components: { Comment }
 };
