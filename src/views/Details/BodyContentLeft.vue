@@ -167,7 +167,7 @@ export default {
                 ]
               }
             ],
-            isShowComment: true, //是否显示评论
+            isShowComment:true, //是否显示评论
             total: 223, //评论数
             name: "Shawn",
             details: "喜欢研究的商人（民科）",
