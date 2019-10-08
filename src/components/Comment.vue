@@ -1,8 +1,8 @@
 <!--评论列表-->
 <template>
-  <div class="comment">
+  <div class="comment" v-if="isCommentExpand">
     <div class="comment-head">
-      <span class="comment-head-l">166条评论</span>
+      <span class="comment-head-l">{{commentTotal}}条评论</span>
       <span class="comment-head-r">
         <span class="comment-head-r-icon">
           <a-icon type="swap" />
@@ -117,7 +117,7 @@
       </div>
     </div>
     <div class="comment-foot">
-      <div class="comment-foot-page">
+      <div class="comment-foot-page" v-if="comment">
         <a-pagination
           :current="currentPage"
           :total="total"
@@ -132,119 +132,13 @@
 
 <script>
 export default {
+  props: ["comment", "isExpand", "commentTotal"],
   data() {
     return {
       currentPage: 1,
       total: 12,
       pageSize: 4,
-      //评论列表内容
-      comment: [
-        {
-          rootComment: {
-            img: "https://pic2.zhimg.com/ebba3f748_xs.jpg",
-            name: "啧啧啧",
-            time: "一年前",
-            text: "哈哈哈",
-            like: 228,
-            isApply: false,
-            isDislike: false,
-            isHover: false
-          },
-          childComment: [
-            {
-              img: "https://pic2.zhimg.com/ebba3f748_xs.jpg",
-              name: "啧啧",
-              time: "十年前",
-              text: "哈哈哈哈哈哈哈",
-              like: 22,
-              isApply: false,
-              applyTo: "啧啧啧",
-              isDislike: false,
-              isHover: false
-            },
-            {
-              img: "https://pic2.zhimg.com/ebba3f748_xs.jpg",
-              name: "啧",
-              time: "一万年前",
-              text: "哈哈哈哈哈哈哈哈哈哈哈哈",
-              like: 32,
-              isApply: false,
-              applyTo: "啧啧",
-              isDislike: false,
-              isHover: false
-            },
-            {
-              img: "https://pic2.zhimg.com/ebba3f748_xs.jpg",
-              name: "啧",
-              time: "一万年前",
-              text: "哈哈哈哈哈哈哈哈哈哈哈哈",
-              like: 32,
-              isApply: false,
-              applyTo: "啧啧",
-              isDislike: false,
-              isHover: false
-            },
-            {
-              img: "https://pic2.zhimg.com/ebba3f748_xs.jpg",
-              name: "啧",
-              time: "一万年前",
-              text: "哈哈哈哈哈哈哈哈哈哈哈哈",
-              like: 32,
-              isApply: false,
-              applyTo: "啧啧",
-              isDislike: false,
-              isHover: false
-            },
-            {
-              img: "https://pic2.zhimg.com/ebba3f748_xs.jpg",
-              name: "啧",
-              time: "一万年前",
-              text: "哈哈哈哈哈哈哈哈哈哈哈哈",
-              like: 32,
-              isApply: false,
-              applyTo: "啧啧",
-              isDislike: false,
-              isHover: false
-            },
-            {
-              img: "https://pic2.zhimg.com/ebba3f748_xs.jpg",
-              name: "啧",
-              time: "一万年前",
-              text: "哈哈哈哈哈哈哈哈哈哈哈哈",
-              like: 32,
-              isApply: false,
-              applyTo: "啧啧",
-              isDislike: false,
-              isHover: false
-            }
-          ]
-        },
-        {
-          rootComment: {
-            img: "https://pic2.zhimg.com/ebba3f748_xs.jpg",
-            name: "啧啧啧",
-            time: "一年前",
-            text: "哈哈哈",
-            like: 228,
-            isApply: false,
-            isDislike: false,
-            isHover: false
-          },
-          childComment: [
-            {
-              img: "https://pic2.zhimg.com/ebba3f748_xs.jpg",
-              name: "啧啧",
-              time: "十年前",
-              text: "哈哈哈哈哈哈哈",
-              like: 22,
-              isApply: false,
-              applyTo: "啧啧啧",
-              isDislike: false,
-              isHover: false
-            }
-          ]
-        }
-      ]
+      isCommentExpand: true
     };
   },
   methods: {
@@ -262,6 +156,11 @@ export default {
     },
     //页面切换
     pageChange(page, pageSize) {}
+  },
+  watch: {
+    isExpand(item) {
+      this.isCommentExpand = item;
+    }
   },
   created() {},
   components: {}
@@ -296,6 +195,11 @@ export default {
   margin-right: 6px;
 }
 /*评论根、子节点*/
+.comment-body-item {
+  margin: 0 20px;
+  border-bottom: 1px solid #f6f6f6;
+}
+
 .comment-body-item-root,
 .comment-body-item-child {
   position: relative;
@@ -395,7 +299,7 @@ export default {
 }
 
 /*评论底部*/
-.comment-foot-page{
+.comment-foot-page {
   display: flex;
   justify-content: center;
   margin: 20px 0;

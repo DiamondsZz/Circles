@@ -2,47 +2,39 @@
 <template>
   <div class="left">
     <div class="left-head">
-      <span class="left-head-left">133个回答</span>
+      <span class="left-head-left">{{details.total}}个回答</span>
       <div class="left-head-right">
         默认排序
         <a-icon class="left-head-right-icon" type="menu-fold" />
       </div>
     </div>
     <div class="left-body">
-      <div class="left-body-item">
+      <div class="left-body-item" v-for="(item,i) in details.answers" :key="i">
         <div class="left-body-user">
           <span class="left-body-user-img">
             <img src="https://pic2.zhimg.com/ebba3f748_xs.jpg" alt />
           </span>
           <div class="left-body-user-text">
-            <div class="left-body-user-name">Shawn Tsien</div>
-            <div class="left-body-user-detail">喜欢研究的商人（民科）</div>
+            <div class="left-body-user-name">{{item.name}}</div>
+            <div class="left-body-user-detail">{{item.details}}</div>
           </div>
         </div>
-        <div class="left-body-person">111人赞同了该回答</div>
-        <div class="left-body-content">
-          你举的例子，依然都还是扯谈，虽然似乎呈现在眼前了，
-          但实际与当初吹嘘的效果差别很大。
-          我已经得出一条屡试不爽的规律：
-          凡是让我惊讶的新技术、新发现，都是吹牛，
-          尤其是出现在中国的。如果文章的标题有“美国人慌了”、
-          “全世界震惊”、“突然宣布”、“懵了”等字眼，
-          这些文章根本不用点开。
-        </div>
+        <div class="left-body-person">{{item.like}}人赞同了该回答</div>
+        <div class="left-body-content">{{item.text}}</div>
         <div class="left-body-expand">
           展开阅读全文
           <a-icon type="down" />
         </div>
-        <div class="left-body-time">发布于昨天 22:20</div>
+        <div class="left-body-time">发布于{{item.time}}</div>
         <div class="left-body-actions">
           <span class="left-body-actions-item">
-            <a-button class="left-body-actions-up" icon="caret-up">赞同 4</a-button>
+            <a-button class="left-body-actions-up" icon="caret-up">赞同 {{item.like}}</a-button>
             <a-button class="left-body-actions-down" icon="caret-down"></a-button>
           </span>
-          <span class="left-body-actions-item left-body-actions-text" @click="showComment">
+          <span class="left-body-actions-item left-body-actions-text" @click="showComment(item)">
             <a-icon class="left-body-actions-icon" type="message" />
-            <span v-if="details.isShowComment">24条评论</span>
-            <span v-else>收起评论</span>
+            <span v-if="item.isShowComment">收起评论</span>
+            <span v-else>24条评论</span>
           </span>
           <span class="left-body-actions-item left-body-actions-text">
             <a-icon class="left-body-actions-icon" type="rocket" />分享
@@ -51,7 +43,7 @@
             <a-icon class="left-body-actions-icon" type="star" />收藏
           </span>
         </div>
-        <comment></comment>
+        <comment :isExpand="item.isShowComment" :comment="item.comments" :commentTotal="item.total"></comment>
       </div>
     </div>
   </div>
@@ -63,14 +55,135 @@ export default {
   data() {
     return {
       details: {
-        isShowComment: true
+        total: 2225, //回答数
+        answers: [
+          {
+            comments: [
+              {
+                id: 1,
+                rootComment: {
+                  img: "https://pic2.zhimg.com/ebba3f748_xs.jpg",
+                  name: "啧啧啧",
+                  time: "一年前",
+                  text: "哈哈哈",
+                  like: 228,
+                  isApply: false,
+                  isDislike: false,
+                  isHover: false
+                },
+                childComment: [
+                  {
+                    img: "https://pic2.zhimg.com/ebba3f748_xs.jpg",
+                    name: "啧啧",
+                    time: "十年前",
+                    text: "哈哈哈哈哈哈哈",
+                    like: 22,
+                    isApply: false,
+                    applyTo: "啧啧啧",
+                    isDislike: false,
+                    isHover: false
+                  },
+                  {
+                    img: "https://pic2.zhimg.com/ebba3f748_xs.jpg",
+                    name: "啧",
+                    time: "一万年前",
+                    text: "哈哈哈哈哈哈哈哈哈哈哈哈",
+                    like: 32,
+                    isApply: false,
+                    applyTo: "啧啧",
+                    isDislike: false,
+                    isHover: false
+                  },
+                  {
+                    img: "https://pic2.zhimg.com/ebba3f748_xs.jpg",
+                    name: "啧",
+                    time: "一万年前",
+                    text: "哈哈哈哈哈哈哈哈哈哈哈哈",
+                    like: 32,
+                    isApply: false,
+                    applyTo: "啧啧",
+                    isDislike: false,
+                    isHover: false
+                  },
+                  {
+                    img: "https://pic2.zhimg.com/ebba3f748_xs.jpg",
+                    name: "啧",
+                    time: "一万年前",
+                    text: "哈哈哈哈哈哈哈哈哈哈哈哈",
+                    like: 32,
+                    isApply: false,
+                    applyTo: "啧啧",
+                    isDislike: false,
+                    isHover: false
+                  },
+                  {
+                    img: "https://pic2.zhimg.com/ebba3f748_xs.jpg",
+                    name: "啧",
+                    time: "一万年前",
+                    text: "哈哈哈哈哈哈哈哈哈哈哈哈",
+                    like: 32,
+                    isApply: false,
+                    applyTo: "啧啧",
+                    isDislike: false,
+                    isHover: false
+                  },
+                  {
+                    img: "https://pic2.zhimg.com/ebba3f748_xs.jpg",
+                    name: "啧",
+                    time: "一万年前",
+                    text: "哈哈哈哈哈哈哈哈哈哈哈哈",
+                    like: 32,
+                    isApply: false,
+                    applyTo: "啧啧",
+                    isDislike: false,
+                    isHover: false
+                  }
+                ]
+              },
+              {
+                id: 2,
+                rootComment: {
+                  img: "https://pic2.zhimg.com/ebba3f748_xs.jpg",
+                  name: "啧啧啧",
+                  time: "一年前",
+                  text: "哈哈哈",
+                  like: 228,
+                  isApply: false,
+                  isDislike: false,
+                  isHover: false
+                },
+                childComment: [
+                  {
+                    img: "https://pic2.zhimg.com/ebba3f748_xs.jpg",
+                    name: "啧啧",
+                    time: "十年前",
+                    text: "哈哈哈哈哈哈哈",
+                    like: 22,
+                    isApply: false,
+                    applyTo: "啧啧啧",
+                    isDislike: false,
+                    isHover: false
+                  }
+                ]
+              }
+            ],
+            isShowComment: true, //是否显示评论
+            total: 223, //评论数
+            name: "Shawn",
+            details: "喜欢研究的商人（民科）",
+            like: 222,
+            text:
+              "你举的例子，依然都还是扯谈，虽然似乎呈现在眼前了，但实际与当初吹嘘的效果差别很大。我已经得出一条屡试不爽的规律：凡是让我惊讶的新技术、新发现，都是吹牛，尤其是出现在中国的。如果文章的标题有“美国人慌了”、“全世界震惊”、“突然宣布”、“懵了”等字眼，这些文章根本不用点开。",
+            time: "昨天 22:20"
+          }
+        ]
       }
     };
   },
   methods: {
-    //查看评论
-    showComment() {
-      this.$set(this.details, "isShowComment", !this.details.isShowComment);
+    //展开评论
+    showComment(item) {
+      this.$set(item, "isShowComment", !item.isShowComment);
     }
   },
   created() {},
@@ -80,9 +193,9 @@ export default {
 <style scoped>
 .left {
   width: 694px;
-  background-color: #fff;
   margin-right: 10px;
   flex-shrink: 0;
+  background-color: #fff;
 }
 
 /*头部*/
@@ -109,8 +222,14 @@ export default {
 /*身体*/
 .left-body-item {
   padding: 16px 20px;
+  margin-bottom: 20px;
 }
-
+.left-body-item::after {
+  display: inline-block;
+  content: "";
+  width: 100%;
+  border-bottom: 1px solid #f6f6f6;
+}
 .left-body .left-body-user {
   display: flex;
   align-items: center;
