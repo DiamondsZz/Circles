@@ -167,7 +167,127 @@ export default {
                 ]
               }
             ],
-            isShowComment:true, //是否显示评论
+            isShowComment: true, //是否显示评论
+            total: 223, //评论数
+            name: "Shawn",
+            details: "喜欢研究的商人（民科）",
+            like: 222,
+            text:
+              "你举的例子，依然都还是扯谈，虽然似乎呈现在眼前了，但实际与当初吹嘘的效果差别很大。我已经得出一条屡试不爽的规律：凡是让我惊讶的新技术、新发现，都是吹牛，尤其是出现在中国的。如果文章的标题有“美国人慌了”、“全世界震惊”、“突然宣布”、“懵了”等字眼，这些文章根本不用点开。",
+            time: "昨天 22:20",
+            isExpandText: false
+          },
+          {
+            comments: [
+              {
+                id: 1,
+                rootComment: {
+                  img: "https://pic2.zhimg.com/ebba3f748_xs.jpg",
+                  name: "啧啧啧",
+                  time: "一年前",
+                  text: "哈哈哈",
+                  like: 228,
+                  isApply: false,
+                  isDislike: false,
+                  isHover: false
+                },
+                childComment: [
+                  {
+                    img: "https://pic2.zhimg.com/ebba3f748_xs.jpg",
+                    name: "啧啧",
+                    time: "十年前",
+                    text: "哈哈哈哈哈哈哈",
+                    like: 22,
+                    isApply: false,
+                    applyTo: "啧啧啧",
+                    isDislike: false,
+                    isHover: false
+                  },
+                  {
+                    img: "https://pic2.zhimg.com/ebba3f748_xs.jpg",
+                    name: "啧",
+                    time: "一万年前",
+                    text: "哈哈哈哈哈哈哈哈哈哈哈哈",
+                    like: 32,
+                    isApply: false,
+                    applyTo: "啧啧",
+                    isDislike: false,
+                    isHover: false
+                  },
+                  {
+                    img: "https://pic2.zhimg.com/ebba3f748_xs.jpg",
+                    name: "啧",
+                    time: "一万年前",
+                    text: "哈哈哈哈哈哈哈哈哈哈哈哈",
+                    like: 32,
+                    isApply: false,
+                    applyTo: "啧啧",
+                    isDislike: false,
+                    isHover: false
+                  },
+                  {
+                    img: "https://pic2.zhimg.com/ebba3f748_xs.jpg",
+                    name: "啧",
+                    time: "一万年前",
+                    text: "哈哈哈哈哈哈哈哈哈哈哈哈",
+                    like: 32,
+                    isApply: false,
+                    applyTo: "啧啧",
+                    isDislike: false,
+                    isHover: false
+                  },
+                  {
+                    img: "https://pic2.zhimg.com/ebba3f748_xs.jpg",
+                    name: "啧",
+                    time: "一万年前",
+                    text: "哈哈哈哈哈哈哈哈哈哈哈哈",
+                    like: 32,
+                    isApply: false,
+                    applyTo: "啧啧",
+                    isDislike: false,
+                    isHover: false
+                  },
+                  {
+                    img: "https://pic2.zhimg.com/ebba3f748_xs.jpg",
+                    name: "啧",
+                    time: "一万年前",
+                    text: "哈哈哈哈哈哈哈哈哈哈哈哈",
+                    like: 32,
+                    isApply: false,
+                    applyTo: "啧啧",
+                    isDislike: false,
+                    isHover: false
+                  }
+                ]
+              },
+              {
+                id: 2,
+                rootComment: {
+                  img: "https://pic2.zhimg.com/ebba3f748_xs.jpg",
+                  name: "啧啧啧",
+                  time: "一年前",
+                  text: "哈哈哈",
+                  like: 228,
+                  isApply: false,
+                  isDislike: false,
+                  isHover: false
+                },
+                childComment: [
+                  {
+                    img: "https://pic2.zhimg.com/ebba3f748_xs.jpg",
+                    name: "啧啧",
+                    time: "十年前",
+                    text: "哈哈哈哈哈哈哈",
+                    like: 22,
+                    isApply: false,
+                    applyTo: "啧啧啧",
+                    isDislike: false,
+                    isHover: false
+                  }
+                ]
+              }
+            ],
+            isShowComment: true, //是否显示评论
             total: 223, //评论数
             name: "Shawn",
             details: "喜欢研究的商人（民科）",
@@ -226,14 +346,17 @@ export default {
 }
 /*身体*/
 .left-body-item {
-  padding: 16px 20px;
-  margin-bottom: 20px;
+  padding: 16px 20px 0px;
 }
+
 .left-body-item::after {
   display: inline-block;
   content: "";
   width: 100%;
   border-bottom: 1px solid #f6f6f6;
+}
+.left-body-item:nth-last-child(1)::after {
+  border-bottom: none;
 }
 .left-body .left-body-user {
   display: flex;
