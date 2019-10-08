@@ -20,8 +20,11 @@
           </div>
         </div>
         <div class="left-body-person">{{item.like}}人赞同了该回答</div>
-        <div class="left-body-content">{{item.text}}</div>
-        <div class="left-body-expand" @click="expandText(item)" v-if="!item.isExpandText">
+        <div
+          class="left-body-content"
+          :class="{'left-body-content-expand':item.isExpandText,'left-body-content-close':!item.isExpandText&&item.text.length>400}"
+        >{{item.text}}</div>
+        <div class="left-body-expand" @click="expandText(item)" v-if="!item.isExpandText&&item.text.length>400">
           展开阅读全文
           <a-icon type="down" />
         </div>
@@ -41,6 +44,14 @@
           </span>
           <span class="left-body-actions-item left-body-actions-text">
             <a-icon class="left-body-actions-icon" type="star" />收藏
+          </span>
+          <span
+            class="left-body-actions-item left-body-actions-text left-body-actions-close"
+            v-if="item.isExpandText"
+            @click="closeText(item)"
+          >
+            收起
+            <a-icon class="left-body-actions-icon" type="up" />
           </span>
         </div>
         <comment :isExpand="item.isShowComment" :comment="item.comments" :commentTotal="item.total"></comment>
@@ -173,9 +184,9 @@ export default {
             details: "喜欢研究的商人（民科）",
             like: 222,
             text:
-              "你举的例子，依然都还是扯谈，虽然似乎呈现在眼前了，但实际与当初吹嘘的效果差别很大。我已经得出一条屡试不爽的规律：凡是让我惊讶的新技术、新发现，都是吹牛，尤其是出现在中国的。如果文章的标题有“美国人慌了”、“全世界震惊”、“突然宣布”、“懵了”等字眼，这些文章根本不用点开。",
+              "你举的例子，依然都还是扯谈，虽然似乎呈现在眼前了，但实际与当初吹嘘的效果差别很大。我已经得出一条屡试不爽的规律：凡是让我惊讶的新技术、新发现，都是吹牛，尤其是出现在中国的。如果文章的标题有“美国人慌了”、“全世界震惊”、“突然宣布”、“懵了”等字眼，这些文章根本不用点开。你举的例子，依然都还是扯谈，虽然似乎呈现在眼前了，但实际与当初吹嘘的效果差别很大。我已经得出一条屡试不爽的规律：凡是让我惊讶的新技术、新发现，都是吹牛，尤其是出现在中国的。如果文章的标题有“美国人慌了”、“全世界震惊”、“突然宣布”、“懵了”等字眼，这些文章根本不用点开。你举的例子，依然都还是扯谈，虽然似乎呈现在眼前了，但实际与当初吹嘘的效果差别很大。我已经得出一条屡试不爽的规律：凡是让我惊讶的新技术、新发现，都是吹牛，尤其是出现在中国的。如果文章的标题有“美国人慌了”、“全世界震惊”、“突然宣布”、“懵了”等字眼，这些文章根本不用点开。你举的例子，依然都还是扯谈，虽然似乎呈现在眼前了，但实际与当初吹嘘的效果差别很大。我已经得出一条屡试不爽的规律：凡是让我惊讶的新技术、新发现，都是吹牛，尤其是出现在中国的。如果文章的标题有“美国人慌了”、“全世界震惊”、“突然宣布”、“懵了”等字眼，这些文章根本不用点开。你举的例子，依然都还是扯谈，虽然似乎呈现在眼前了，但实际与当初吹嘘的效果差别很大。我已经得出一条屡试不爽的规律：凡是让我惊讶的新技术、新发现，都是吹牛，尤其是出现在中国的。如果文章的标题有“美国人慌了”、“全世界震惊”、“突然宣布”、“懵了”等字眼，这些文章根本不用点开。你举的例子，依然都还是扯谈，虽然似乎呈现在眼前了，但实际与当初吹嘘的效果差别很大。我已经得出一条屡试不爽的规律：凡是让我惊讶的新技术、新发现，都是吹牛，尤其是出现在中国的。如果文章的标题有“美国人慌了”、“全世界震惊”、“突然宣布”、“懵了”等字眼，这些文章根本不用点开。你举的例子，依然都还是扯谈，虽然似乎呈现在眼前了，但实际与当初吹嘘的效果差别很大。我已经得出一条屡试不爽的规律：凡是让我惊讶的新技术、新发现，都是吹牛，尤其是出现在中国的。如果文章的标题有“美国人慌了”、“全世界震惊”、“突然宣布”、“懵了”等字眼，这些文章根本不用点开。你举的例子，依然都还是扯谈，虽然似乎呈现在眼前了，但实际与当初吹嘘的效果差别很大。我已经得出一条屡试不爽的规律：凡是让我惊讶的新技术、新发现，都是吹牛，尤其是出现在中国的。如果文章的标题有“美国人慌了”、“全世界震惊”、“突然宣布”、“懵了”等字眼，这些文章根本不用点开。你举的例子，依然都还是扯谈，虽然似乎呈现在眼前了，但实际与当初吹嘘的效果差别很大。我已经得出一条屡试不爽的规律：凡是让我惊讶的新技术、新发现，都是吹牛，尤其是出现在中国的。如果文章的标题有“美国人慌了”、“全世界震惊”、“突然宣布”、“懵了”等字眼，这些文章根本不用点开。你举的例子，依然都还是扯谈，虽然似乎呈现在眼前了，但实际与当初吹嘘的效果差别很大。我已经得出一条屡试不爽的规律：凡是让我惊讶的新技术、新发现，都是吹牛，尤其是出现在中国的。如果文章的标题有“美国人慌了”、“全世界震惊”、“突然宣布”、“懵了”等字眼，这些文章根本不用点开。你举的例子，依然都还是扯谈，虽然似乎呈现在眼前了，但实际与当初吹嘘的效果差别很大。我已经得出一条屡试不爽的规律：凡是让我惊讶的新技术、新发现，都是吹牛，尤其是出现在中国的。如果文章的标题有“美国人慌了”、“全世界震惊”、“突然宣布”、“懵了”等字眼，这些文章根本不用点开。",
             time: "昨天 22:20",
-            isExpandText: false
+            isExpandText: false,
           },
           {
             comments: [
@@ -308,6 +319,9 @@ export default {
     },
     expandText(item) {
       this.$set(item, "isExpandText", !item.isExpandText);
+    },
+    closeText(item) {
+      this.$set(item, "isExpandText", !item.isExpandText);
     }
   },
 
@@ -386,8 +400,15 @@ export default {
 }
 .left-body .left-body-content {
   line-height: 24px;
+  font-size: 15px;
+}
+.left-body .left-body-content-expand {
+  height: auto;
+}
+.left-body .left-body-content-close {
   /* 遮罩层 */
   mask-image: linear-gradient(#000, transparent);
+  max-height: 100px;
 }
 .left-body .left-body-expand {
   color: #175199;
@@ -422,5 +443,9 @@ export default {
 .left-body .left-body-actions .left-body-actions-text {
   color: #8590a6;
   cursor: pointer;
+}
+.left-body .left-body-actions .left-body-actions-close {
+  float: right;
+  line-height: 32px;
 }
 </style>
