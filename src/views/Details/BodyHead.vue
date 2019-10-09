@@ -52,7 +52,10 @@
         <a-button class="details-body-head-actions-item details-body-head-actions-btn">
           <a-icon type="team" />邀请回答
         </a-button>
-        <span class="details-body-head-actions-item details-body-head-actions-comment">
+        <span
+          class="details-body-head-actions-item details-body-head-actions-comment"
+          @click="showComment"
+        >
           <a-icon class="details-body-head-actions-icon" type="message" theme="filled" />
           {{details.commentCount}}条评论
         </span>
@@ -68,10 +71,25 @@
         </span>
       </div>
     </div>
+
+    <a-modal
+      :width="700"
+      :visible="comment.commentVisible"
+      :bodyStyle="{'padding-top':'40px'}"
+      :footer="null"
+      @cancel="comment.commentVisible=false"
+    >
+      <comment
+        :isExpand="true"
+        :comment="comment.commentContent"
+        :commentTotal="comment.commentTotal"
+      ></comment>
+    </a-modal>
   </div>
 </template>
 
 <script>
+import Comment from "@/components/Comment";
 export default {
   data() {
     return {
@@ -85,6 +103,119 @@ export default {
         commentCount: 34,
         follow: 22456,
         look: 23
+      },
+      comment: {
+        commentVisible: false,
+        commentContent: [
+          {
+            id: 1,
+            rootComment: {
+              img: "https://pic2.zhimg.com/ebba3f748_xs.jpg",
+              name: "啧啧啧",
+              time: "一年前",
+              text: "哈哈哈",
+              like: 228,
+              isApply: false,
+              isDislike: false,
+              isHover: false
+            },
+            childComment: [
+              {
+                img: "https://pic2.zhimg.com/ebba3f748_xs.jpg",
+                name: "啧啧",
+                time: "十年前",
+                text: "哈哈哈哈哈哈哈",
+                like: 22,
+                isApply: false,
+                applyTo: "啧啧啧",
+                isDislike: false,
+                isHover: false
+              },
+              {
+                img: "https://pic2.zhimg.com/ebba3f748_xs.jpg",
+                name: "啧",
+                time: "一万年前",
+                text: "哈哈哈哈哈哈哈哈哈哈哈哈",
+                like: 32,
+                isApply: false,
+                applyTo: "啧啧",
+                isDislike: false,
+                isHover: false
+              },
+              {
+                img: "https://pic2.zhimg.com/ebba3f748_xs.jpg",
+                name: "啧",
+                time: "一万年前",
+                text: "哈哈哈哈哈哈哈哈哈哈哈哈",
+                like: 32,
+                isApply: false,
+                applyTo: "啧啧",
+                isDislike: false,
+                isHover: false
+              },
+              {
+                img: "https://pic2.zhimg.com/ebba3f748_xs.jpg",
+                name: "啧",
+                time: "一万年前",
+                text: "哈哈哈哈哈哈哈哈哈哈哈哈",
+                like: 32,
+                isApply: false,
+                applyTo: "啧啧",
+                isDislike: false,
+                isHover: false
+              },
+              {
+                img: "https://pic2.zhimg.com/ebba3f748_xs.jpg",
+                name: "啧",
+                time: "一万年前",
+                text: "哈哈哈哈哈哈哈哈哈哈哈哈",
+                like: 32,
+                isApply: false,
+                applyTo: "啧啧",
+                isDislike: false,
+                isHover: false
+              },
+              {
+                img: "https://pic2.zhimg.com/ebba3f748_xs.jpg",
+                name: "啧",
+                time: "一万年前",
+                text: "哈哈哈哈哈哈哈哈哈哈哈哈",
+                like: 32,
+                isApply: false,
+                applyTo: "啧啧",
+                isDislike: false,
+                isHover: false
+              }
+            ]
+          },
+          {
+            id: 2,
+            rootComment: {
+              img: "https://pic2.zhimg.com/ebba3f748_xs.jpg",
+              name: "啧啧啧",
+              time: "一年前",
+              text: "哈哈哈",
+              like: 228,
+              isApply: false,
+              isDislike: false,
+              isHover: false
+            },
+            childComment: [
+              {
+                img: "https://pic2.zhimg.com/ebba3f748_xs.jpg",
+                name: "啧啧",
+                time: "十年前",
+                text: "哈哈哈哈哈哈哈",
+                like: 22,
+                isApply: false,
+                applyTo: "啧啧啧",
+                isDislike: false,
+                isHover: false
+              }
+            ]
+          }
+        ],
+        commentTotal: 56
       }
     };
   },
@@ -95,10 +226,13 @@ export default {
     },
     closeTotal() {
       this.$set(this.details, "isShowTotal", false);
+    },
+    showComment() {
+      this.$set(this.comment, "commentVisible", true);
     }
   },
   created() {},
-  components: {}
+  components: { Comment }
 };
 </script>
 <style scoped>
