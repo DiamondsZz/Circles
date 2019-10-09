@@ -5,18 +5,22 @@
       <div class="details-body-head-content">
         <div class="details-body-head-content-left">
           <div class="details-body-head-content-left-tags">
-            <a-tag color="blue">马云</a-tag>
-            <a-tag color="blue">互联网</a-tag>
-            <a-tag color="blue">BAT</a-tag>
+            <a-tag color="blue" v-for="(item,i) in details.tags" :key="i">{{item}}</a-tag>
           </div>
+          <div class="details-body-head-content-left-til">{{details.til}}</div>
           <div
-            class="details-body-head-content-left-til"
-          >2019 年 9 月 10 日马云正式宣布不再担任阿里巴巴董事局主席，阿里未来会如何发展？</div>
-          <div class="details-body-head-content-left-short">
+            class="details-body-head-content-left-short"
+            :class="{'details-body-head-content-left-short-expand':details.isShowTotal,'details-body-head-content-left-short-close':!details.isShowTotal}"
+          >
             <span
               class="details-body-head-content-left-short-text"
-            >9月10日教师节，阿里巴巴创办人、「乡村教师」马云将正式卸任董事局主席一职，而今日也正是阿里巴巴集团创办20周年整，马云昨日亲身到访阿里巴巴位于杭州的</span>
-            <span type="link" class="details-body-head-content-left-short-btn">
+            >{{details.isShowTotal?details.text:details.text.substring(0,80)}}</span>
+            <span
+              type="link"
+              class="details-body-head-content-left-short-btn"
+              v-if="!details.isShowTotal"
+              @click="showTotal"
+            >
               显示全部
               <a-icon class="details-body-head-content-left-short-btn-icon" type="down" />
             </span>
@@ -25,11 +29,11 @@
         <div class="details-body-head-content-right">
           <div class="details-body-head-content-right-item">
             <span class="details-body-head-content-right-item-til">关注者</span>
-            <span class="details-body-head-content-right-item-text">234,111</span>
+            <span class="details-body-head-content-right-item-text">{{details.follow}}</span>
           </div>
           <div class="details-body-head-content-right-item">
             <span class="details-body-head-content-right-item-til">被浏览</span>
-            <span class="details-body-head-content-right-item-text">4,532,666</span>
+            <span class="details-body-head-content-right-item-text">{{details.look}}</span>
           </div>
         </div>
       </div>
@@ -49,12 +53,17 @@
           <a-icon type="team" />邀请回答
         </a-button>
         <span class="details-body-head-actions-item details-body-head-actions-comment">
-          <a-icon class="details-body-head-actions-icon" type="message" theme="filled" />22条评论
+          <a-icon class="details-body-head-actions-icon" type="message" theme="filled" />
+          {{details.commentCount}}条评论
         </span>
         <span class="details-body-head-actions-item details-body-head-actions-share">
           <a-icon class="details-body-head-actions-icon" type="rocket" theme="filled" />分享
         </span>
-        <span class="details-body-head-actions-item details-body-head-actions-up">
+        <span
+          class="details-body-head-actions-item details-body-head-actions-up"
+          v-if="details.isShowTotal"
+          @click="closeTotal"
+        >
           <a-icon class="details-body-head-actions-icon" type="up" />收起
         </span>
       </div>
@@ -65,9 +74,29 @@
 <script>
 export default {
   data() {
-    return {};
+    return {
+      details: {
+        isShowTotal: false,
+        tags: ["马云", "互联网", "BAT"],
+        til:
+          "2019 年 9 月 10 日马云正式宣布不再担任阿里巴巴董事局主席，阿里未来会如何发展？",
+        text:
+          "9月10日教师节，阿里巴巴创办人、「乡村教师」马云将正式卸任董事局主席一职，而今日也正是阿里巴巴集团创办20周年整，马云昨日亲身到访阿里巴巴位于杭州的9月10日教师节，阿里巴巴创办人、「乡村教师」马云将正式卸任董事局主席一职，而今日也正是阿里巴巴集团创办20周年整，马云昨日亲身到访阿里巴巴位于杭州的9月10日教师节，阿里巴巴创办人、「乡村教师」马云将正式卸任董事局主席一职，而今日也正是阿里巴巴集团创办20周年整，马云昨日亲身到访阿里巴巴位于杭州的9月10日教师节，阿里巴巴创办人、「乡村教师」马云将正式卸任董事局主席一职，而今日也正是阿里巴巴集团创办20周年整，马云昨日亲身到访阿里巴巴位于杭州的9月10日教师节，阿里巴巴创办人、「乡村教师」马云将正式卸任董事局主席一职，而今日也正是阿里巴巴集团创办20周年整，马云昨日亲身到访阿里巴巴位于杭州的9月10日教师节，阿里巴巴创办人、「乡村教师」马云将正式卸任董事局主席一职，而今日也正是阿里巴巴集团创办20周年整，马云昨日亲身到访阿里巴巴位于杭州的9月10日教师节，阿里巴巴创办人、「乡村教师」马云将正式卸任董事局主席一职，而今日也正是阿里巴巴集团创办20周年整，马云昨日亲身到访阿里巴巴位于杭州的9月10日教师节，阿里巴巴创办人、「乡村教师」马云将正式卸任董事局主席一职，而今日也正是阿里巴巴集团创办20周年整，马云昨日亲身到访阿里巴巴位于杭州的9月10日教师节，阿里巴巴创办人、「乡村教师」马云将正式卸任董事局主席一职，而今日也正是阿里巴巴集团创办20周年整，马云昨日亲身到访阿里巴巴位于杭州的9月10日教师节，阿里巴巴创办人、「乡村教师」马云将正式卸任董事局主席一职，而今日也正是阿里巴巴集团创办20周年整，马云昨日亲身到访阿里巴巴位于杭州的9月10日教师节，阿里巴巴创办人、「乡村教师」马云将正式卸任董事局主席一职，而今日也正是阿里巴巴集团创办20周年整，马云昨日亲身到访阿里巴巴位于杭州的",
+        commentCount: 34,
+        follow: 22456,
+        look: 23
+      }
+    };
   },
-  methods: {},
+  methods: {
+    //显示全部
+    showTotal() {
+      this.$set(this.details, "isShowTotal", true);
+    },
+    closeTotal() {
+      this.$set(this.details, "isShowTotal", false);
+    }
+  },
   created() {},
   components: {}
 };
@@ -107,6 +136,13 @@ export default {
   font-weight: 600;
   color: #1a1a1a;
 }
+.details-body-head-content-left-short-close {
+  overflow: hidden;
+  max-height: 50px;
+}
+.details-body-head-content-left-short-expand {
+  height: auto;
+}
 .details-body-head-content-left-short
   .details-body-head-content-left-short-text {
   font-size: 15px;
@@ -116,6 +152,7 @@ export default {
   .details-body-head-content-left-short-btn {
   color: #8590a6;
   margin-left: 10px;
+  cursor: pointer;
 }
 .details-body-head-content-left-short-btn >>> .ant-btn {
   padding: 0;
@@ -168,5 +205,6 @@ export default {
 .details-body-head-actions .details-body-head-actions-share,
 .details-body-head-actions .details-body-head-actions-up {
   color: #8590a6;
+  cursor: pointer;
 }
 </style>
