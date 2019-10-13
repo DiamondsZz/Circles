@@ -125,7 +125,10 @@
           @change="pageChange()"
         />
       </div>
-      <div class="comment-foot-input"></div>
+      <div class="comment-foot-input">
+        <a-input class="comment-foot-input-l" placeholder="写下你的评论..."></a-input>
+        <a-button class="comment-foot-input-r" type="primary">发布</a-button>
+      </div>
     </div>
   </div>
 </template>
@@ -395,9 +398,23 @@ export default {
 }
 
 /*评论底部*/
-.comment-foot-page{
+.comment-foot-page {
   display: flex;
   justify-content: center;
-  margin: 20px 0;
+  margin-top: 16px;
+  padding: 12px 0;
+  border-top: 1px solid #ebebeb;
+  border-bottom: 1px solid #ebebeb;
+}
+.comment-foot-input {
+  display: flex;
+  padding: 12px 20px;
+}
+.comment-foot-input-l {
+  height: 40px;
+  margin-right: 20px;
+}
+.comment-foot-input-r {
+  height: 40px;
 }
 </style>
