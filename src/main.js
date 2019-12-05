@@ -4,7 +4,7 @@ import App from './App.vue'
 import { Button, Input, Icon, message, Avatar, List, Tabs, Popover, Tag, Modal, Checkbox, Pagination } from 'ant-design-vue'
 import 'ant-design-vue/dist/antd.css'
 import "./assets/css/public.css"
-
+import "./axios";
 
 Vue.config.productionTip = false
 

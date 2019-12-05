@@ -72,6 +72,7 @@
 
 <script>
 import Editor from "../../components/Editor";
+import { log } from "util";
 export default {
   data() {
     return {
@@ -144,10 +145,18 @@ export default {
     //提问内容提交
     async questionSend() {
       this.isClickEditor = !this.isClickEditor; //监听编辑器的状态   是否点击发布问题按钮
-      console.log(this.quesTil);
       await this.getEditorContent(); //直到获取编辑器最新内容更新才执行下一步
-      console.log(this.quesContent);
-      //this.questionModal = false;
+      this.$axios
+        .post("/question/ask", {
+          til: this.quesTil,
+          content: this.quesContent
+        })
+        .then(res => {
+          console.log(res);
+          if (res.status === 200) {
+            this.questionModal = false;
+          }
+        });
     },
 
     //获取编辑器返回的文本内容

@@ -86,9 +86,19 @@ export default {
       this.router("/details");
     },
     //赞
-    likeClick(item) {}
+    likeClick(item) {},
+    //获取问题数据
+    getData() {
+      this.$axios.get("/question/get").then(res => {
+        if (res.status === 200) {
+          //this.recomData = res.data;
+        }
+      });
+    }
   },
-  created() {},
+  created() {
+    this.getData();
+  },
   components: {}
 };
 </script>
