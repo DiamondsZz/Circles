@@ -4,7 +4,10 @@
     <div class="details-body-head">
       <div class="details-body-head-content">
         <div class="details-body-head-content-left">
-          <div class="details-body-head-content-left-tags">
+          <div
+            class="details-body-head-content-left-tags"
+            v-if="details.tags&&details.tags.length>0"
+          >
             <a-tag color="blue" v-for="(item,i) in details.tags" :key="i">{{item}}</a-tag>
           </div>
           <div class="details-body-head-content-left-til">{{details.til}}</div>
@@ -14,11 +17,11 @@
           >
             <span
               class="details-body-head-content-left-short-text"
-            >{{details.isShowTotal?details.text:details.text.substring(0,80)}}</span>
+            >{{detailsContent}}</span>
             <span
               type="link"
               class="details-body-head-content-left-short-btn"
-              v-if="!details.isShowTotal"
+              v-if="!details.isShowTotal&&detailsContent&&detailsContent.length>200"
               @click="showTotal"
             >
               显示全部
@@ -29,11 +32,11 @@
         <div class="details-body-head-content-right">
           <div class="details-body-head-content-right-item">
             <span class="details-body-head-content-right-item-til">关注者</span>
-            <span class="details-body-head-content-right-item-text">{{details.follow}}</span>
+            <span class="details-body-head-content-right-item-text">{{details.follower}}</span>
           </div>
           <div class="details-body-head-content-right-item">
             <span class="details-body-head-content-right-item-til">被浏览</span>
-            <span class="details-body-head-content-right-item-text">{{details.look}}</span>
+            <span class="details-body-head-content-right-item-text">{{details.looked}}</span>
           </div>
         </div>
       </div>
@@ -46,6 +49,7 @@
           type="primary"
           ghost
           class="details-body-head-actions-item details-body-head-actions-btn"
+          @click="writeAnswer"
         >
           <a-icon type="edit" />写回答
         </a-button>
@@ -93,17 +97,8 @@ import Comment from "@/components/Comment";
 export default {
   data() {
     return {
-      details: {
-        isShowTotal: false,
-        tags: ["马云", "互联网", "BAT"],
-        til:
-          "2019 年 9 月 10 日马云正式宣布不再担任阿里巴巴董事局主席，阿里未来会如何发展？",
-        text:
-          "9月10日教师节，阿里巴巴创办人、「乡村教师」马云将正式卸任董事局主席一职，而今日也正是阿里巴巴集团创办20周年整，马云昨日亲身到访阿里巴巴位于杭州的9月10日教师节，阿里巴巴创办人、「乡村教师」马云将正式卸任董事局主席一职，而今日也正是阿里巴巴集团创办20周年整，马云昨日亲身到访阿里巴巴位于杭州的9月10日教师节，阿里巴巴创办人、「乡村教师」马云将正式卸任董事局主席一职，而今日也正是阿里巴巴集团创办20周年整，马云昨日亲身到访阿里巴巴位于杭州的9月10日教师节，阿里巴巴创办人、「乡村教师」马云将正式卸任董事局主席一职，而今日也正是阿里巴巴集团创办20周年整，马云昨日亲身到访阿里巴巴位于杭州的9月10日教师节，阿里巴巴创办人、「乡村教师」马云将正式卸任董事局主席一职，而今日也正是阿里巴巴集团创办20周年整，马云昨日亲身到访阿里巴巴位于杭州的9月10日教师节，阿里巴巴创办人、「乡村教师」马云将正式卸任董事局主席一职，而今日也正是阿里巴巴集团创办20周年整，马云昨日亲身到访阿里巴巴位于杭州的9月10日教师节，阿里巴巴创办人、「乡村教师」马云将正式卸任董事局主席一职，而今日也正是阿里巴巴集团创办20周年整，马云昨日亲身到访阿里巴巴位于杭州的9月10日教师节，阿里巴巴创办人、「乡村教师」马云将正式卸任董事局主席一职，而今日也正是阿里巴巴集团创办20周年整，马云昨日亲身到访阿里巴巴位于杭州的9月10日教师节，阿里巴巴创办人、「乡村教师」马云将正式卸任董事局主席一职，而今日也正是阿里巴巴集团创办20周年整，马云昨日亲身到访阿里巴巴位于杭州的9月10日教师节，阿里巴巴创办人、「乡村教师」马云将正式卸任董事局主席一职，而今日也正是阿里巴巴集团创办20周年整，马云昨日亲身到访阿里巴巴位于杭州的9月10日教师节，阿里巴巴创办人、「乡村教师」马云将正式卸任董事局主席一职，而今日也正是阿里巴巴集团创办20周年整，马云昨日亲身到访阿里巴巴位于杭州的",
-        commentCount: 34,
-        follow: 22456,
-        look: 23
-      },
+      id: this.$route.query.id,
+      details: {},
       comment: {
         commentVisible: false,
         commentContent: [
@@ -220,6 +215,19 @@ export default {
     };
   },
   methods: {
+    getData() {
+      this.$axios
+        .get("/question/details", { params: { questionId: this.id } })
+        .then(res => {
+          if (res.status === 200) {
+            console.log(22);
+            this.details = res.data;
+            this.$set(this.details, "isShowTotal", false);
+            this.$set(this.details, "tags", ["马云", "互联网", "BAT"]);
+            this.$set(this.details, "commentCount", 22);
+          }
+        });
+    },
     //显示全部
     showTotal() {
       this.$set(this.details, "isShowTotal", true);
@@ -229,9 +237,33 @@ export default {
     },
     showComment() {
       this.$set(this.comment, "commentVisible", true);
+    },
+    //写回答
+    writeAnswer() {
+      this.$store.commit("questionModal", {
+        questionModal: !this.$store.state.questionModal
+      });
     }
   },
-  created() {},
+  computed: {
+    //问题详情
+    detailsContent() {
+      if (this.details.isShowTotal) {
+        return (
+          this.details.content &&
+          this.details.content.replace(new RegExp("<.+?>", "g"), "")
+        );
+      } else {
+        return (
+          this.details.content &&
+          this.details.content.replace(new RegExp("<.+?>", "g"), "").substring(0, 80)
+        );
+      }
+    }
+  },
+  created() {
+    this.getData();
+  },
   components: { Comment }
 };
 </script>

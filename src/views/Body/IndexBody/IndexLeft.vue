@@ -5,9 +5,11 @@
       <a-tab-pane tab="推荐" key="1">
         <a-list itemLayout="vertical" :dataSource="recomData" :locale="{emptyText: '暂无数据'}">
           <a-list-item slot="renderItem" slot-scope="item">
-            <a-list-item-meta :description="item.description">
-              <a slot="title" @click="showDetails(item)">{{item.title}}</a>
-            </a-list-item-meta>
+            <div class="body-left-til" @click="showDetails(item)">{{item.til}}</div>
+            <div class="body-left-answer">
+              {{item.question_answer&&item.question_answer[0].userName}}：
+              <span>{{item.question_answer&&item.question_answer[0].content|filterAnswerContent}}</span>
+            </div>
             <template slot="actions">
               <span>
                 <a-icon
@@ -16,15 +18,15 @@
                   theme="filled"
                   @click="likeClick(item)"
                 />
-                {{item.like}}
+                {{item.question_answer&&item.question_answer[0].like}}
               </span>
-              <span>
+              <!-- <span>
                 <a-icon type="dislike" class="body-left-actions-icon" theme="filled" />
-                {{item.dislike}}
-              </span>
+                {{item.question_answer&&item.question_answer[0].dislike}}
+              </span>-->
               <span>
                 <a-icon type="message" class="body-left-actions-icon" theme="filled" />
-                <span>{{item.message}}条评论</span>
+                <span>{{item.question_answer&&item.question_answer[0].commentCount}}条评论</span>
               </span>
               <span>
                 <a-icon type="rocket" class="body-left-actions-icon" theme="filled" />分享
@@ -33,7 +35,7 @@
                 <a-icon type="star" class="body-left-actions-icon" theme="filled" />收藏
               </span>
             </template>
-            <img v-if="item.media" slot="extra" width="272" alt="logo" :src="item.media" />
+            <img v-if="item.cover" slot="extra" width="272" alt="logo" :src="item.cover" />
           </a-list-item>
         </a-list>
       </a-tab-pane>
@@ -48,32 +50,7 @@ export default {
   data() {
     return {
       //推荐列表数据
-      recomData: [
-        {
-          title: "《王者荣耀》有什么鲜为人知的操作技巧？",
-          description:
-            "赫连谁谁： 好久不玩这个游戏了，今天看了个视频突然有点想玩一把，哈哈哈",
-          media:
-            "https://pic1.zhimg.com/50/v2-680c3cb36c5cdd557537336cd0b01e48_400x224.jpg",
-          like: 23,
-          user: { likeStatus: true, disLikeStatus: false },
-          dislike: 4,
-          message: 28,
-          isShowComment: true
-        },
-        {
-          title: "跳绳才是减脂大杀器！你得这么跳",
-          description:
-            "左菲约瘦： 跳绳，是大家再熟悉不过的运动，然而，跳了那么久，你跳绳的动作真的正确吗？想要减脂，跳绳好还是跑步好？跳绳会不会让小腿变粗呢？今天，小乐就来给大家一一解答。 图片版权归乐动力所有 跳绳 vs 跑步",
-          media:
-            "https://pic1.zhimg.com/50/v2-ff5f65186e5b6f6b013f44ac892b0a38_400x224.jpg",
-          like: 3,
-          user: { likeStatus: false, disLikeStatus: false },
-          dislike: 24,
-          message: 2,
-          isShowComment: true
-        }
-      ]
+      recomData: []
     };
   },
   methods: {
@@ -83,17 +60,28 @@ export default {
     },
     //查看文章详情
     showDetails(item) {
-      this.router("/details");
+      this.router({
+        path: "/details",
+        query: {
+          id: item._id
+        }
+      });
     },
     //赞
     likeClick(item) {},
     //获取问题数据
     getData() {
-      this.$axios.get("/question/get").then(res => {
+      this.$axios.get("/question/already").then(res => {
         if (res.status === 200) {
-          //this.recomData = res.data;
+          this.recomData = res.data;
         }
       });
+    }
+  },
+  filters: {
+    //获取问题回答富文本 的文本内容
+    filterAnswerContent(val) {
+      return val && val.replace(new RegExp("<.+?>", "g"), "");
     }
   },
   created() {
@@ -108,6 +96,7 @@ export default {
   width: 694px;
   background-color: #fff;
   margin-right: 10px;
+  box-shadow: 0px 1px 3px rgba(26, 26, 26, 0.1);
 }
 .body-left >>> .ant-tabs-tab {
   margin: 0 22px;
@@ -133,21 +122,24 @@ export default {
 }
 .body-left >>> .ant-list-vertical .ant-list-item-extra img {
   width: 100%;
+  height:100%;
   border-radius: 4px;
 }
-.body-left >>> .ant-list-item-meta-title a {
+.body-left .body-left-til {
   font-size: 18px;
-  font-weight: 800;
-  color: #000;
-}
-
-.body-left >>> .ant-list-item-meta-description {
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 4;
-  text-overflow: ellipsis;
-  overflow: hidden;
+  font-weight: 600;
   color: #1a1a1a;
+  cursor: pointer;
+  margin-bottom: 4px;
+}
+.body-left .body-left-answer {
+  display: -webkit-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  color:#1a1a1a;
+  font-size: 15px;
 }
 .body-left .body-left-actions-icon {
   margin-right: 4px;

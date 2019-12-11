@@ -57,7 +57,7 @@ export default {
 }
 .body-right-write {
   background-color: #fff;
-  box-shadow: 0 1px 3px rgba(26, 26, 26, 0.1);
+  box-shadow: 0 1px 3px rgba(26,26,26,.1);
 }
 .body-right-write-items {
   display: flex;
