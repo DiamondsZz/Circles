@@ -12,51 +12,52 @@
     </div>
     <div class="comment-body">
       <div class="comment-body-item" v-for="(root,i) in comment" :key="i">
-        <div
-          class="comment-body-item-root"
-          @mouseover="hover(root.rootComment)"
-          @mouseout="out(root.rootComment)"
-        >
+        <div class="comment-body-item-root" @mouseover="hover(root)" @mouseout="out(root)">
           <div class="comment-body-item-head">
             <span class="comment-body-item-head-l">
-              <img :src="root.rootComment.img" alt />
-              {{root.rootComment.name}}
+              <img :src="root.user&&root.user.userImg" alt />
+              {{root.user&&root.user.userName}}
             </span>
-            <span class="comment-body-item-head-r">{{root.rootComment.time}}</span>
+            <span class="comment-body-item-head-r">{{moment(root.time).format("YYYY-MM-DD")}}</span>
           </div>
           <div class="comment-body-item-body">
-            <div class="comment-body-item-content">{{root.rootComment.text}}</div>
+            <div class="comment-body-item-content">{{root.content}}</div>
             <div class="comment-body-item-actions">
               <div class="comment-body-item-action">
                 <span class="comment-body-item-action-like comment-body-item-icon">
                   <a-icon type="like" />
-                  {{root.rootComment.like}}
+                  {{root.like}}
                 </span>
-                <span class="comment-body-item-action-other" v-show="root.rootComment.isHover">
-                  <span class="comment-body-item-icon" @click="apply(root.rootComment)">
+                <span class="comment-body-item-action-other" v-show="root.isHover">
+                  <span class="comment-body-item-icon" @click="apply(root)">
                     <a-icon type="swap-left" />
-                    {{root.rootComment.isApply?'取消回复':'回复'}}
+                    {{root.isApply?'取消回复':'回复'}}
                   </span>
                   <span class="comment-body-item-icon">
                     <a-icon type="dislike" />
-                    {{root.rootComment.disLike?'取消踩':'踩'}}
+                    {{root.disLike?'取消踩':'踩'}}
                   </span>
                 </span>
               </div>
 
               <div
                 class="comment-body-item-inp"
-                :class="{'comment-body-item-inp-active':root.rootComment.isApply} "
+                :class="{'comment-body-item-inp-active':root.isApply} "
               >
-                <a-input class="comment-body-item-inp-l" v-if="root.rootComment.isApply">
+                <a-input
+                  class="comment-body-item-inp-l"
+                  v-if="root.isApply"
+                  v-model="childCommentContent"
+                >
                   <a-icon slot="suffix" type="smile" />
                 </a-input>
 
                 <transition name="comment-body-item-inp-btn">
                   <a-button
-                    v-if="root.rootComment.isApply"
+                    v-if="root.isApply"
                     class="comment-body-item-inp-r"
                     type="primary"
+                    @click="publishChildComment(root._id,root.user._id)"
                   >发布</a-button>
                 </transition>
               </div>
@@ -65,24 +66,26 @@
         </div>
         <div
           class="comment-body-item-child"
-          v-for="(child,j) in root.childComment"
+          v-for="(child,j) in root.child"
           :key="j"
           @mouseover="hover(child)"
           @mouseout="out(child)"
         >
           <div class="comment-body-item-head">
             <span class="comment-body-item-head-l">
-              <img :src="child.img" alt />
-              {{child.name}}
-              <span class="comment-body-item-head-apply">
+              <img :src="child.user&&child.user.userImg" alt />
+              {{child.user&&child.user.userName}}
+              <span
+                class="comment-body-item-head-apply"
+              >
                 <span class="comment-body-item-head-apply-text">回复</span>
-                {{child.applyTo}}
+                {{child.userCommented&&child.userCommented.userName}}
               </span>
             </span>
-            <span class="comment-body-item-head-r">{{child.time}}</span>
+            <span class="comment-body-item-head-r">{{moment(child.time).format("YYYY-MM-DD")}}</span>
           </div>
           <div class="comment-body-item-body">
-            <div class="comment-body-item-content">{{child.text}}</div>
+            <div class="comment-body-item-content">{{child.content}}</div>
             <div class="comment-body-item-actions">
               <div class="comment-body-item-action">
                 <span class="comment-body-item-action-like comment-body-item-icon">
@@ -104,11 +107,20 @@
                 class="comment-body-item-inp"
                 :class="{'comment-body-item-inp-active':child.isApply}"
               >
-                <a-input class="comment-body-item-inp-l" v-if="child.isApply">
+                <a-input
+                  class="comment-body-item-inp-l"
+                  v-if="child.isApply"
+                  v-model="childCommentContent"
+                >
                   <a-icon slot="suffix" type="smile" />
                 </a-input>
                 <transition name="comment-body-item-inp-btn">
-                  <a-button class="comment-body-item-inp-r" type="primary" v-if="child.isApply">发布</a-button>
+                  <a-button
+                    class="comment-body-item-inp-r"
+                    type="primary"
+                    v-if="child.isApply"
+                    @click="publishChildComment(root._id,child.user._id)"
+                  >发布</a-button>
                 </transition>
               </div>
             </div>
@@ -126,14 +138,15 @@
         />
       </div>
       <div class="comment-foot-input">
-        <a-input class="comment-foot-input-l" placeholder="写下你的评论..."></a-input>
-        <a-button class="comment-foot-input-r" type="primary">发布</a-button>
+        <a-input class="comment-foot-input-l" placeholder="写下你的评论..." v-model="rootCommentContent"></a-input>
+        <a-button class="comment-foot-input-r" type="primary" @click="publishRootComment">发布</a-button>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import moment from "moment";
 export default {
   props: ["comment", "isExpand", "commentTotal"],
   data() {
@@ -141,10 +154,13 @@ export default {
       currentPage: 1,
       total: 12,
       pageSize: 4,
-      isCommentExpand: true
+      isCommentExpand: false,
+      childCommentContent: "", //评论的评论内容
+      rootCommentContent: "" //回答的评论内容
     };
   },
   methods: {
+    moment,
     //点击回复按钮
     apply(item) {
       this.$set(item, "isApply", !item.isApply);
@@ -157,6 +173,18 @@ export default {
     out(item) {
       this.$set(item, "isHover", false);
     },
+    //发布回答的评论内容
+    publishRootComment() {
+      this.$emit("publishRootComment", { text: this.rootCommentContent });
+    },
+    //发布评论的评论内容
+    publishChildComment(commentId, userId) {
+      this.$emit("publishChildComment", {
+        text: this.childCommentContent,
+        commentId,
+        userId
+      });
+    },
     //页面切换
     pageChange(page, pageSize) {}
   },
@@ -165,7 +193,9 @@ export default {
       this.isCommentExpand = item;
     }
   },
-  created() {},
+  created() {
+    this.isCommentExpand = this.isExpand;
+  },
   components: {}
 };
 </script>

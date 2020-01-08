@@ -1,7 +1,10 @@
 <!-- 首页头部左边 -->
 <template>
   <div class="head-content-left">
-    <div class="head-content-left-logo"></div>
+    <div class="head-content-left-logo">
+      <img src="@/assets/logo.png" alt="">
+
+    </div>
     <div class="head-content-left-menu">
       <div
         v-for="(item,i) in menus"
@@ -181,8 +184,13 @@ export default {
   display: flex;
   align-items: center;
 }
+.head-content-left-logo img{
+  width:100px;
+  height:40px;
+}
 .head-content-left-menu {
   display: flex;
+  flex-shrink: 0;
   margin: 0 23px;
 }
 .head-content-left-menu .head-content-left-menu-item {

@@ -61,7 +61,7 @@
           @click="showComment"
         >
           <a-icon class="details-body-head-actions-icon" type="message" theme="filled" />
-          {{details.commentCount}}条评论
+          {{comment.commentContent&&comment.commentContent.length}}条评论
         </span>
         <span class="details-body-head-actions-item details-body-head-actions-share">
           <a-icon class="details-body-head-actions-icon" type="rocket" theme="filled" />分享
@@ -86,7 +86,7 @@
       <comment
         :isExpand="true"
         :comment="comment.commentContent"
-        :commentTotal="comment.commentTotal"
+        :commentTotal="comment.commentContent&&comment.commentContent.length"
       ></comment>
     </a-modal>
   </div>
@@ -210,7 +210,6 @@ export default {
             ]
           }
         ],
-        commentTotal: 56
       }
     };
   },
@@ -220,7 +219,6 @@ export default {
         .get("/question/details", { params: { questionId: this.id } })
         .then(res => {
           if (res.status === 200) {
-            console.log(22);
             this.details = res.data;
             this.$set(this.details, "isShowTotal", false);
             this.$set(this.details, "tags", ["马云", "互联网", "BAT"]);

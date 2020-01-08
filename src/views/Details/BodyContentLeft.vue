@@ -57,7 +57,7 @@
             <span class="left-body-actions-item left-body-actions-text" @click="showComment(item)">
               <a-icon class="left-body-actions-icon" type="message" />
               <span v-if="item.isShowComment">收起评论</span>
-              <span v-else>{{item.commentCount}}条评论</span>
+              <span v-else @click="getComment(item._id)">{{item.commentCount}}条评论</span>
             </span>
             <span class="left-body-actions-item left-body-actions-text">
               <a-icon class="left-body-actions-icon" type="rocket" />分享
@@ -74,7 +74,13 @@
               <a-icon class="left-body-actions-icon" type="up" />
             </span>
           </div>
-          <!-- <comment :isExpand="item.isShowComment" :comment="comments" :commentTotal="item.total"></comment> -->
+          <comment
+            :isExpand="item.isShowComment"
+            :comment="comments"
+            :commentTotal="comments.length"
+            @publishChildComment="publishCommentChild(arguments,i)"
+            @publishRootComment="publishCommentRoot(arguments,item._id,item.questionId,i)"
+          ></comment>
         </div>
       </div>
       <div class="empty" v-if="details.answers&&details.answers.length===0">
@@ -93,121 +99,14 @@ export default {
   data() {
     return {
       id: this.$route.query.id, //问题id
+      answerId: null, //回答id
       questionModal: this.$store.state.questionModal,
       isClickEditor: false,
       quesContent: "",
       details: {
         answers: []
       },
-      comments: [
-        {
-          id: 1,
-          rootComment: {
-            img: "https://pic2.zhimg.com/ebba3f748_xs.jpg",
-            name: "啧啧啧",
-            time: "一年前",
-            text: "哈哈哈",
-            like: 228,
-            isApply: false,
-            isDislike: false,
-            isHover: false
-          },
-          childComment: [
-            {
-              img: "https://pic2.zhimg.com/ebba3f748_xs.jpg",
-              name: "啧啧",
-              time: "十年前",
-              text: "哈哈哈哈哈哈哈",
-              like: 22,
-              isApply: false,
-              applyTo: "啧啧啧",
-              isDislike: false,
-              isHover: false
-            },
-            {
-              img: "https://pic2.zhimg.com/ebba3f748_xs.jpg",
-              name: "啧",
-              time: "一万年前",
-              text: "哈哈哈哈哈哈哈哈哈哈哈哈",
-              like: 32,
-              isApply: false,
-              applyTo: "啧啧",
-              isDislike: false,
-              isHover: false
-            },
-            {
-              img: "https://pic2.zhimg.com/ebba3f748_xs.jpg",
-              name: "啧",
-              time: "一万年前",
-              text: "哈哈哈哈哈哈哈哈哈哈哈哈",
-              like: 32,
-              isApply: false,
-              applyTo: "啧啧",
-              isDislike: false,
-              isHover: false
-            },
-            {
-              img: "https://pic2.zhimg.com/ebba3f748_xs.jpg",
-              name: "啧",
-              time: "一万年前",
-              text: "哈哈哈哈哈哈哈哈哈哈哈哈",
-              like: 32,
-              isApply: false,
-              applyTo: "啧啧",
-              isDislike: false,
-              isHover: false
-            },
-            {
-              img: "https://pic2.zhimg.com/ebba3f748_xs.jpg",
-              name: "啧",
-              time: "一万年前",
-              text: "哈哈哈哈哈哈哈哈哈哈哈哈",
-              like: 32,
-              isApply: false,
-              applyTo: "啧啧",
-              isDislike: false,
-              isHover: false
-            },
-            {
-              img: "https://pic2.zhimg.com/ebba3f748_xs.jpg",
-              name: "啧",
-              time: "一万年前",
-              text: "哈哈哈哈哈哈哈哈哈哈哈哈",
-              like: 32,
-              isApply: false,
-              applyTo: "啧啧",
-              isDislike: false,
-              isHover: false
-            }
-          ]
-        },
-        {
-          id: 2,
-          rootComment: {
-            img: "https://pic2.zhimg.com/ebba3f748_xs.jpg",
-            name: "啧啧啧",
-            time: "一年前",
-            text: "哈哈哈",
-            like: 228,
-            isApply: false,
-            isDislike: false,
-            isHover: false
-          },
-          childComment: [
-            {
-              img: "https://pic2.zhimg.com/ebba3f748_xs.jpg",
-              name: "啧啧",
-              time: "十年前",
-              text: "哈哈哈哈哈哈哈",
-              like: 22,
-              isApply: false,
-              applyTo: "啧啧啧",
-              isDislike: false,
-              isHover: false
-            }
-          ]
-        }
-      ]
+      comments: []
     };
   },
   methods: {
@@ -227,22 +126,12 @@ export default {
       this.questionModal = true;
     },
 
-    // 对回答数据添加属性  isShowComment：是否显示评论   isExpandText：是否展开全文
-    setAnswerProperties(answers) {
-      return answers.map(item => {
-        item.isShowComment = false;
-        item.isExpandText = false;
-        return item;
-      });
-    },
-
     //获取回答数据
     getData() {
-      this.$axios
+      return this.$axios
         .get("/answer/get", { params: { questionId: this.id } })
         .then(res => {
           if (res.status === 200) {
-            console.log(this.setAnswerProperties(res.data));
             this.$set(this.details, "answers", res.data);
           }
         });
@@ -270,6 +159,54 @@ export default {
     //获取编辑器返回的文本内容
     getEditorContent(content) {
       this.quesContent = content;
+    },
+
+    //发布回答评论
+    publishCommentRoot(param, answerId, questionId, i) {
+      //子组件传递参数通过父组件触发事件的arguments参数进行接收,该arguments是个参数数组 ,子组件传递参数为对象时,对应arguments[0]
+      let { text } = param[0];
+      this.$axios
+        .post("/comment/root/publish", {
+          questionId,
+          answerId,
+          content: text
+        })
+        .then(async res => {
+          if (res.status === 200) {
+            await this.getComment(this.answerId);
+            await this.getData();
+            this.$set(this.details.answers[i], "isShowComment", true); //保持评论处于展开状态
+            this.$message.success("发布成功");
+          }
+        });
+    },
+    //发布评论的评论
+    publishCommentChild(param, i) {
+      this.$axios
+        .post("/comment/child/publish", {
+          content: param[0].text,
+          commentId: param[0].commentId,
+          userCommented: param[0].userId
+        })
+        .then(async res => {
+          if (res.status === 200) {
+            await this.getComment(this.answerId);
+            await this.getData();
+            this.$set(this.details.answers[i], "isShowComment", true); //保持评论处于展开状态
+            this.$message.success("发布成功");
+          }
+        });
+    },
+    //获取评论内容
+    getComment(id) {
+      this.answerId = id;
+      return this.$axios
+        .get("/comment/root/get", { params: { id } })
+        .then(res => {
+          if (res.status === 200) {
+            this.comments = res.data;
+          }
+        });
     }
   },
   watch: {
