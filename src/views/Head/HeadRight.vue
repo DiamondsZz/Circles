@@ -8,7 +8,7 @@
       <a-icon type="message" theme="filled" class="head-icon" />
     </span>
     <span class="head-content-right-user">
-      <a-avatar icon="user" />
+      <a-avatar icon="user"  :src="$store.state.user.userImg"/>
     </span>
   </div>
 </template>

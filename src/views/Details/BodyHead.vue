@@ -15,9 +15,7 @@
             class="details-body-head-content-left-short"
             :class="{'details-body-head-content-left-short-expand':details.isShowTotal,'details-body-head-content-left-short-close':!details.isShowTotal}"
           >
-            <span
-              class="details-body-head-content-left-short-text"
-            >{{detailsContent}}</span>
+            <span class="details-body-head-content-left-short-text">{{detailsContent}}</span>
             <span
               type="link"
               class="details-body-head-content-left-short-btn"
@@ -101,115 +99,7 @@ export default {
       details: {},
       comment: {
         commentVisible: false,
-        commentContent: [
-          {
-            id: 1,
-            rootComment: {
-              img: "https://pic2.zhimg.com/ebba3f748_xs.jpg",
-              name: "啧啧啧",
-              time: "一年前",
-              text: "哈哈哈",
-              like: 228,
-              isApply: false,
-              isDislike: false,
-              isHover: false
-            },
-            childComment: [
-              {
-                img: "https://pic2.zhimg.com/ebba3f748_xs.jpg",
-                name: "啧啧",
-                time: "十年前",
-                text: "哈哈哈哈哈哈哈",
-                like: 22,
-                isApply: false,
-                applyTo: "啧啧啧",
-                isDislike: false,
-                isHover: false
-              },
-              {
-                img: "https://pic2.zhimg.com/ebba3f748_xs.jpg",
-                name: "啧",
-                time: "一万年前",
-                text: "哈哈哈哈哈哈哈哈哈哈哈哈",
-                like: 32,
-                isApply: false,
-                applyTo: "啧啧",
-                isDislike: false,
-                isHover: false
-              },
-              {
-                img: "https://pic2.zhimg.com/ebba3f748_xs.jpg",
-                name: "啧",
-                time: "一万年前",
-                text: "哈哈哈哈哈哈哈哈哈哈哈哈",
-                like: 32,
-                isApply: false,
-                applyTo: "啧啧",
-                isDislike: false,
-                isHover: false
-              },
-              {
-                img: "https://pic2.zhimg.com/ebba3f748_xs.jpg",
-                name: "啧",
-                time: "一万年前",
-                text: "哈哈哈哈哈哈哈哈哈哈哈哈",
-                like: 32,
-                isApply: false,
-                applyTo: "啧啧",
-                isDislike: false,
-                isHover: false
-              },
-              {
-                img: "https://pic2.zhimg.com/ebba3f748_xs.jpg",
-                name: "啧",
-                time: "一万年前",
-                text: "哈哈哈哈哈哈哈哈哈哈哈哈",
-                like: 32,
-                isApply: false,
-                applyTo: "啧啧",
-                isDislike: false,
-                isHover: false
-              },
-              {
-                img: "https://pic2.zhimg.com/ebba3f748_xs.jpg",
-                name: "啧",
-                time: "一万年前",
-                text: "哈哈哈哈哈哈哈哈哈哈哈哈",
-                like: 32,
-                isApply: false,
-                applyTo: "啧啧",
-                isDislike: false,
-                isHover: false
-              }
-            ]
-          },
-          {
-            id: 2,
-            rootComment: {
-              img: "https://pic2.zhimg.com/ebba3f748_xs.jpg",
-              name: "啧啧啧",
-              time: "一年前",
-              text: "哈哈哈",
-              like: 228,
-              isApply: false,
-              isDislike: false,
-              isHover: false
-            },
-            childComment: [
-              {
-                img: "https://pic2.zhimg.com/ebba3f748_xs.jpg",
-                name: "啧啧",
-                time: "十年前",
-                text: "哈哈哈哈哈哈哈",
-                like: 22,
-                isApply: false,
-                applyTo: "啧啧啧",
-                isDislike: false,
-                isHover: false
-              }
-            ]
-          }
-        ],
+        commentContent: []
       }
     };
   },
@@ -254,7 +144,9 @@ export default {
       } else {
         return (
           this.details.content &&
-          this.details.content.replace(new RegExp("<.+?>", "g"), "").substring(0, 80)
+          this.details.content
+            .replace(new RegExp("<.+?>", "g"), "")
+            .substring(0, 80)
         );
       }
     }

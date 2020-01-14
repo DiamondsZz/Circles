@@ -57,7 +57,7 @@
             <span class="left-body-actions-item left-body-actions-text" @click="showComment(item)">
               <a-icon class="left-body-actions-icon" type="message" />
               <span v-if="item.isShowComment">收起评论</span>
-              <span v-else @click="getComment(item._id)">{{item.commentCount}}条评论</span>
+              <span v-else @click="getComment(item._id,1)">{{item.commentCount}}条评论</span>
             </span>
             <span class="left-body-actions-item left-body-actions-text">
               <a-icon class="left-body-actions-icon" type="rocket" />分享
@@ -77,9 +77,10 @@
           <comment
             :isExpand="item.isShowComment"
             :comment="comments"
-            :commentTotal="comments.length"
+            :commentTotal="item.commentCount"
             @publishChildComment="publishCommentChild(arguments,i)"
             @publishRootComment="publishCommentRoot(arguments,item._id,item.questionId,i)"
+            @pageChange="commentPageChange"
           ></comment>
         </div>
       </div>
@@ -106,7 +107,8 @@ export default {
       details: {
         answers: []
       },
-      comments: []
+      comments: [],
+      currentPage: 1
     };
   },
   methods: {
@@ -173,7 +175,7 @@ export default {
         })
         .then(async res => {
           if (res.status === 200) {
-            await this.getComment(this.answerId);
+            await this.getComment(this.answerId, this.currentPage);
             await this.getData();
             this.$set(this.details.answers[i], "isShowComment", true); //保持评论处于展开状态
             this.$message.success("发布成功");
@@ -186,11 +188,12 @@ export default {
         .post("/comment/child/publish", {
           content: param[0].text,
           commentId: param[0].commentId,
+          user:this.$store.state.user._id,
           userCommented: param[0].userId
         })
         .then(async res => {
           if (res.status === 200) {
-            await this.getComment(this.answerId);
+            await this.getComment(this.answerId, this.currentPage);
             await this.getData();
             this.$set(this.details.answers[i], "isShowComment", true); //保持评论处于展开状态
             this.$message.success("发布成功");
@@ -198,15 +201,21 @@ export default {
         });
     },
     //获取评论内容
-    getComment(id) {
+    getComment(id, currentPage) {
+      this.comments=[];//数据清空
       this.answerId = id;
       return this.$axios
-        .get("/comment/root/get", { params: { id } })
+        .get("/comment/root/get", { params: { id, currentPage } })
         .then(res => {
           if (res.status === 200) {
             this.comments = res.data;
           }
         });
+    },
+    //评论分页查询
+    commentPageChange(currentPage) {
+      this.currentPage = currentPage;
+      this.getComment(this.answerId, this.currentPage);
     }
   },
   watch: {

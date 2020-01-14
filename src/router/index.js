@@ -8,7 +8,7 @@ import IndexBody from "../views/Body/IndexBody/Index.vue"
 import FindBody from "../views/Body/FindBody/Index.vue"
 import AnswerBody from "../views/Body/AnswerBody/Index.vue"
 import Details from "../views/Details/Index.vue"
-
+import Login from "../views/Login/Index.vue"
 
 Vue.use(VueRouter);
 export default new VueRouter({
@@ -41,5 +41,8 @@ export default new VueRouter({
     }, {
         path: '/details',
         component: Details,
+    }, {
+        path: '/login',
+        component: Login,
     }]
 })

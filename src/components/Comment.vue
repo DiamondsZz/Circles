@@ -129,12 +129,12 @@
       </div>
     </div>
     <div class="comment-foot">
-      <div class="comment-foot-page" v-if="comment">
+      <div class="comment-foot-page" v-if="total>0">
         <a-pagination
           :current="currentPage"
           :total="total"
           :pageSize="pageSize"
-          @change="pageChange()"
+          @change="pageChange"
         />
       </div>
       <div class="comment-foot-input">
@@ -152,7 +152,7 @@ export default {
   data() {
     return {
       currentPage: 1,
-      total: 12,
+      total: this.commentTotal,
       pageSize: 4,
       isCommentExpand: false,
       childCommentContent: "", //评论的评论内容
@@ -186,11 +186,17 @@ export default {
       });
     },
     //页面切换
-    pageChange(page, pageSize) {}
+    pageChange(currentPage) {
+      this.currentPage = currentPage;
+      this.$emit("pageChange", currentPage);
+    }
   },
   watch: {
     isExpand(item) {
       this.isCommentExpand = item;
+    },
+    commentTotal(total) {
+      this.total = total;
     }
   },
   created() {
