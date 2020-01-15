@@ -65,6 +65,7 @@ export default {
 /*内容左边部分*/
 .body .body-left {
   width: 694px;
+  height:100%;
   background-color: #fff;
   margin-right: 10px;
 }

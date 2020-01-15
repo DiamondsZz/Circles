@@ -4,7 +4,7 @@
     <div class="ques" v-if="questionModal">
       <div class="ques-til">
         <div class="ques-til-l">
-          <img src="https://pic2.zhimg.com/ebba3f748_xs.jpg" alt />
+          <img :src="$store.state.user.userImg" alt />
         </div>
       </div>
       <div class="ques-des">
@@ -27,11 +27,11 @@
         <div class="left-body-item" v-for="(item,i) in details.answers" :key="i">
           <div class="left-body-user">
             <span class="left-body-user-img">
-              <img src="https://pic2.zhimg.com/ebba3f748_xs.jpg" alt />
+              <img :src="item.user.userImg" alt />
             </span>
             <div class="left-body-user-text">
-              <div class="left-body-user-name">{{item.userName}}</div>
-              <div class="left-body-user-detail">{{item.userIntroduce}}</div>
+              <div class="left-body-user-name">{{item.user.userName}}</div>
+              <div class="left-body-user-detail">{{item.user.userIntroduce}}</div>
             </div>
           </div>
           <div class="left-body-person">{{item.like}}人赞同了该回答</div>
@@ -142,6 +142,7 @@ export default {
     writeAnswer() {
       this.$axios
         .post("/answer/write", {
+          user: this.$store.state.user._id,
           questionId: this.id,
           content: this.quesContent
         })
@@ -169,6 +170,7 @@ export default {
       let { text } = param[0];
       this.$axios
         .post("/comment/root/publish", {
+          user: this.$store.state.user._id,
           questionId,
           answerId,
           content: text
@@ -188,7 +190,7 @@ export default {
         .post("/comment/child/publish", {
           content: param[0].text,
           commentId: param[0].commentId,
-          user:this.$store.state.user._id,
+          user: this.$store.state.user._id,
           userCommented: param[0].userId
         })
         .then(async res => {
@@ -202,7 +204,7 @@ export default {
     },
     //获取评论内容
     getComment(id, currentPage) {
-      this.comments=[];//数据清空
+      this.comments = []; //数据清空
       this.answerId = id;
       return this.$axios
         .get("/comment/root/get", { params: { id, currentPage } })

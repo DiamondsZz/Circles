@@ -5,5 +5,6 @@ export default {
   },
   user(state, { user }) {
     state.user = user;
+    sessionStorage.setItem("user", JSON.stringify(user))
   }
 }

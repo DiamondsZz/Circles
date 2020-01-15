@@ -7,8 +7,8 @@
           <a-list-item slot="renderItem" slot-scope="item">
             <div class="body-left-til" @click="showDetails(item)">{{item.til}}</div>
             <div class="body-left-answer">
-              {{item.question_answer&&item.question_answer[0].userName}}：
-              <span>{{item.question_answer&&item.question_answer[0].content|filterAnswerContent}}</span>
+              {{item.answer&&item.answer[0].user.userName}}：
+              <span>{{item.answer&&item.answer[0].content|filterAnswerContent}}</span>
             </div>
             <template slot="actions">
               <span>
@@ -18,7 +18,7 @@
                   theme="filled"
                   @click="likeClick(item)"
                 />
-                {{item.question_answer&&item.question_answer[0].like}}
+                {{item.answer&&item.answer[0].like}}
               </span>
               <!-- <span>
                 <a-icon type="dislike" class="body-left-actions-icon" theme="filled" />
@@ -26,7 +26,7 @@
               </span>-->
               <span>
                 <a-icon type="message" class="body-left-actions-icon" theme="filled" />
-                <span>{{item.question_answer&&item.question_answer[0].commentCount}}条评论</span>
+                <span>{{item.answer&&item.answer[0].commentCount}}条评论</span>
               </span>
               <span>
                 <a-icon type="rocket" class="body-left-actions-icon" theme="filled" />分享
@@ -94,6 +94,7 @@ export default {
 /*内容左边部分*/
 .body .body-left {
   width: 694px;
+  height:100%;
   background-color: #fff;
   margin-right: 10px;
   box-shadow: 0px 1px 3px rgba(26, 26, 26, 0.1);
@@ -122,7 +123,7 @@ export default {
 }
 .body-left >>> .ant-list-vertical .ant-list-item-extra img {
   width: 100%;
-  height:100%;
+  height: 100%;
   border-radius: 4px;
 }
 .body-left .body-left-til {
@@ -138,7 +139,7 @@ export default {
   text-overflow: ellipsis;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 3;
-  color:#1a1a1a;
+  color: #1a1a1a;
   font-size: 15px;
 }
 .body-left .body-left-actions-icon {

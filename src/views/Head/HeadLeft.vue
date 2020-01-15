@@ -43,7 +43,7 @@
     >
       <div class="ques-til">
         <div class="ques-til-l">
-          <img src="https://pic2.zhimg.com/ebba3f748_xs.jpg" alt />
+          <img :src="$store.state.user.userImg" alt />
         </div>
         <div class="ques-til-r">
           <div class="ques-til-inp">
@@ -149,6 +149,7 @@ export default {
       await this.getEditorContent(); //直到获取编辑器最新内容更新才执行下一步
       this.$axios
         .post("/question/ask", {
+          user:this.$store.state.user._id,
           til: this.quesTil,
           content: this.quesContent
         })
