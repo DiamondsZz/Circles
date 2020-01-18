@@ -1,5 +1,8 @@
 <template>
   <div class="index">
+    <div class="logo">
+      <img src="@/assets/logo.png" alt />
+    </div>
     <div class="login">
       <a-form class="login-form" :form="form">
         <a-form-item>
@@ -39,7 +42,7 @@ export default {
             if (res.data.code === 1) {
               await this.$store.commit("user", {
                 user: res.data.user
-              });  
+              });
               await this.$router.push("/");
             } else if (res.data.code === -1) {
               this.$message.error("手机号或密码不正确");
@@ -62,9 +65,15 @@ export default {
   background-repeat: no-repeat;
   overflow: hidden;
 }
+.logo {
+  width: 300px;
+  margin: 120px auto 50px;
+  display: flex;
+  justify-content: center;
+}
 .login {
   width: 320px;
-  margin: 200px auto;
+  margin: 0px auto 200px;
   background-color: rgba(0, 0, 0, 0.3);
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   border-radius: 10px;

@@ -7,10 +7,20 @@
     </div>
 
     <div class="head-details" :class="{'down-scroll':downScroll}">
-      <div class="head-details-til">从你的经历来看，什么时候感到做一个中国人很幸福？</div>
+      <div class="head-details-til">{{this.$store.state.questionCurrent.til}}</div>
       <div class="head-details-btn">
-        <a-button class="head-details-btn-item" type="primary">关注问题</a-button>
-        <a-button class="head-details-btn-item" type="primary" ghost icon="edit">写回答</a-button>
+        <a-button
+          :type="this.$store.state.questionCurrent.isFollow?'default':'primary'"
+          class="details-body-head-actions-item details-body-head-actions-btn"
+          @click="followQuestion"
+        >{{this.$store.state.questionCurrent.isFollow?"已关注":"关注问题"}}</a-button>
+        <a-button
+          class="head-details-btn-item"
+          type="primary"
+          ghost
+          icon="edit"
+          @click="writeAnswer"
+        >写回答</a-button>
       </div>
     </div>
   </div>
@@ -29,7 +39,48 @@ export default {
       fixedTop: false
     };
   },
-  methods: {},
+  methods: {
+    //写回答
+    async writeAnswer() {
+      await this.$store.commit("questionModal", {
+        questionModal: !this.$store.state.questionModal
+      });
+      //回到顶部  显示回答提交框
+      document.documentElement.scrollTop=200;
+    },
+    getData() {
+      this.$axios
+        .get("/question/details", {
+          params: {
+            questionId: this.$store.state.questionCurrent._id,
+            userId: this.$store.state.user._id
+          }
+        })
+        .then(res => {
+          if (res.status === 200) {
+            this.$store.commit("questionCurrent", { question: res.data });
+          }
+        });
+    },
+    //关注问题
+    followQuestion() {
+      this.$axios
+        .post("/follow/question", {
+          question: this.$store.state.questionCurrent._id,
+          user: this.$store.state.user._id
+        })
+        .then(async res => {
+          if (res.status === 200) {
+            await this.getData();
+            if (this.$store.state.questionCurrent.isFollow) {
+              await this.$message.success("取消成功");
+            } else {
+              await this.$message.success("关注成功");
+            }
+          }
+        });
+    }
+  },
   watch: {
     isScrollDown(downScroll) {
       this.downScroll = downScroll;

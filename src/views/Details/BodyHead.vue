@@ -6,20 +6,24 @@
         <div class="details-body-head-content-left">
           <div
             class="details-body-head-content-left-tags"
-            v-if="details.tags&&details.tags.length>0"
+            v-if="this.$store.state.questionCurrent.tags&&this.$store.state.questionCurrent.tags.length>0"
           >
-            <a-tag color="blue" v-for="(item,i) in details.tags" :key="i">{{item}}</a-tag>
+            <a-tag
+              color="blue"
+              v-for="(item,i) in this.$store.state.questionCurrent.tags"
+              :key="i"
+            >{{item}}</a-tag>
           </div>
-          <div class="details-body-head-content-left-til">{{details.til}}</div>
+          <div class="details-body-head-content-left-til">{{this.$store.state.questionCurrent.til}}</div>
           <div
             class="details-body-head-content-left-short"
-            :class="{'details-body-head-content-left-short-expand':details.isShowTotal,'details-body-head-content-left-short-close':!details.isShowTotal}"
+            :class="{'details-body-head-content-left-short-expand':this.$store.state.questionCurrent.isShowTotal,'details-body-head-content-left-short-close':!this.$store.state.questionCurrent.isShowTotal}"
           >
             <span class="details-body-head-content-left-short-text">{{detailsContent}}</span>
             <span
               type="link"
               class="details-body-head-content-left-short-btn"
-              v-if="!details.isShowTotal&&detailsContent&&detailsContent.length>200"
+              v-if="!this.$store.state.questionCurrent.isShowTotal&&detailsContent&&detailsContent.length>200"
               @click="showTotal"
             >
               显示全部
@@ -30,19 +34,24 @@
         <div class="details-body-head-content-right">
           <div class="details-body-head-content-right-item">
             <span class="details-body-head-content-right-item-til">关注者</span>
-            <span class="details-body-head-content-right-item-text">{{details.follower}}</span>
+            <span
+              class="details-body-head-content-right-item-text"
+            >{{this.$store.state.questionCurrent.follower}}</span>
           </div>
           <div class="details-body-head-content-right-item">
             <span class="details-body-head-content-right-item-til">被浏览</span>
-            <span class="details-body-head-content-right-item-text">{{details.looked}}</span>
+            <span
+              class="details-body-head-content-right-item-text"
+            >{{this.$store.state.questionCurrent.looked}}</span>
           </div>
         </div>
       </div>
       <div class="details-body-head-actions">
         <a-button
-          type="primary"
+          :type="this.$store.state.questionCurrent.isFollow?'default':'primary'"
           class="details-body-head-actions-item details-body-head-actions-btn"
-        >关注问题</a-button>
+          @click="followQuestion"
+        >{{this.$store.state.questionCurrent.isFollow?"已关注":"关注问题"}}</a-button>
         <a-button
           type="primary"
           ghost
@@ -66,7 +75,7 @@
         </span>
         <span
           class="details-body-head-actions-item details-body-head-actions-up"
-          v-if="details.isShowTotal"
+          v-if="this.$store.state.questionCurrent.isShowTotal"
           @click="closeTotal"
         >
           <a-icon class="details-body-head-actions-icon" type="up" />收起
@@ -96,7 +105,6 @@ export default {
   data() {
     return {
       id: this.$route.query.id,
-      details: {},
       comment: {
         commentVisible: false,
         commentContent: []
@@ -106,48 +114,77 @@ export default {
   methods: {
     getData() {
       this.$axios
-        .get("/question/details", { params: { questionId: this.id } })
+        .get("/question/details", {
+          params: { questionId: this.id, userId: this.$store.state.user._id }
+        })
         .then(res => {
           if (res.status === 200) {
-            this.details = res.data;
-            this.$set(this.details, "isShowTotal", false);
-            this.$set(this.details, "tags", ["马云", "互联网", "BAT"]);
-            this.$set(this.details, "commentCount", 22);
+            let details = res.data;
+            details.isShowTotal = false;
+            details.tags = ["马云", "互联网", "BAT"];
+            this.$store.commit("questionCurrent", { question: details });
           }
         });
     },
     //显示全部
     showTotal() {
-      this.$set(this.details, "isShowTotal", true);
+      let question = JSON.parse(
+        JSON.stringify(this.$store.state.questionCurrent)
+      );
+      question.isShowTotal = true;
+      this.$store.commit("questionCurrent", { question });
     },
     closeTotal() {
-      this.$set(this.details, "isShowTotal", false);
+      let question = JSON.parse(
+        JSON.stringify(this.$store.state.questionCurrent)
+      );
+      question.isShowTotal = false;
+      this.$store.commit("questionCurrent", { question });
     },
     showComment() {
-      this.$set(this.comment, "commentVisible", true);
+      let question = JSON.parse(
+        JSON.stringify(this.$store.state.questionCurrent)
+      );
+      question.commentVisible = true;
+      this.$store.commit("questionCurrent", { question });
     },
     //写回答
     writeAnswer() {
       this.$store.commit("questionModal", {
         questionModal: !this.$store.state.questionModal
       });
+    },
+    //关注问题
+    followQuestion() {
+      this.$axios
+        .post("/follow/question", {
+          question: this.id,
+          user: this.$store.state.user._id
+        })
+        .then(async res => {
+          if (res.status === 200) {
+            await this.getData();
+            if (this.$store.state.questionCurrent.isFollow) {
+              await this.$message.success("取消成功");
+            } else {
+              await this.$message.success("关注成功");
+            }
+          }
+        });
     }
   },
   computed: {
     //问题详情
     detailsContent() {
-      if (this.details.isShowTotal) {
-        return (
-          this.details.content &&
-          this.details.content.replace(new RegExp("<.+?>", "g"), "")
-        );
+      let question = JSON.parse(
+        JSON.stringify(this.$store.state.questionCurrent)
+      );
+      if (question.isShowTotal) {
+        return question.content.replace(new RegExp("<.+?>", "g"), "");
       } else {
-        return (
-          this.details.content &&
-          this.details.content
-            .replace(new RegExp("<.+?>", "g"), "")
-            .substring(0, 80)
-        );
+        return question.content
+          .replace(new RegExp("<.+?>", "g"), "")
+          .substring(0, 80);
       }
     }
   },

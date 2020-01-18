@@ -6,5 +6,9 @@ export default {
   user(state, { user }) {
     state.user = user;
     sessionStorage.setItem("user", JSON.stringify(user))
+  },
+  questionCurrent(state, { question }) {
+    state.questionCurrent = question;
+    sessionStorage.setItem("questionCurrent", JSON.stringify(question))
   }
 }
