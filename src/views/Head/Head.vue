@@ -3,7 +3,7 @@
   <div class="head" :class="{'head-fixed':fixedTop}">
     <div class="head-content" :class="{'up-scroll':downScroll}">
       <head-left></head-left>
-      <head-right></head-right>
+      <head-right :message="message"></head-right>
     </div>
 
     <div class="head-details" :class="{'down-scroll':downScroll}">
@@ -36,17 +36,28 @@ export default {
   data() {
     return {
       downScroll: false,
-      fixedTop: false
+      fixedTop: false,  
+      message:[]  //消息数  
     };
   },
   methods: {
+    //获取消息通知
+    getMessage() {
+      this.$axios
+        .get("/message/get", { params: { id: this.$store.state.user._id } })
+        .then(res => {
+          if (res.status === 200) {
+            this.message=res.data;
+          }
+        });
+    },
     //写回答
     async writeAnswer() {
       await this.$store.commit("questionModal", {
         questionModal: !this.$store.state.questionModal
       });
       //回到顶部  显示回答提交框
-      document.documentElement.scrollTop=200;
+      document.documentElement.scrollTop = 200;
     },
     getData() {
       this.$axios
@@ -78,6 +89,18 @@ export default {
               await this.$message.success("关注成功");
             }
           }
+        })
+        .then(() => {
+          this.$axios
+            .post("/message/create", {
+              type: this.$store.state.questionCurrent.isFollow ? 1 : 0,
+              fromUser: this.$store.state.user._id, //当前用户
+              user: this.$store.state.questionCurrent.user._id //关注的用户
+            })
+            .then(res => {
+              if (res.status === 200) {
+              }
+            });
         });
     }
   },
@@ -89,7 +112,9 @@ export default {
       this.fixedTop = fixedTop;
     }
   },
-  created() {},
+  created() {
+    this.getMessage();
+  },
   components: {
     HeadLeft,
     HeadRight

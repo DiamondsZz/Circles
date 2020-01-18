@@ -170,6 +170,18 @@ export default {
               await this.$message.success("关注成功");
             }
           }
+        })
+        .then(() => {
+          this.$axios
+            .post("/message/create", {
+              type: this.$store.state.questionCurrent.isFollow ? 1 : 0,
+              fromUser: this.$store.state.user._id, //当前用户
+              user: this.$store.state.questionCurrent.user._id //关注的用户
+            })
+            .then(res => {
+              if (res.status === 200) {
+              }
+            });
         });
     }
   },

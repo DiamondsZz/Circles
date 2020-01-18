@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import VueRouter from "./router"
 import App from './App.vue'
-import {Button, Input, Icon, message, Avatar, List, Tabs, Popover, Tag, Modal, Checkbox, Pagination,Form} from 'ant-design-vue'
+import {Button, Input, Icon, message, Avatar, List, Tabs, Popover, Tag, Modal, Checkbox, Pagination,Form,Badge} from 'ant-design-vue'
 import 'ant-design-vue/dist/antd.css'
 import "./assets/css/public.css"
 import "./axios";
@@ -22,6 +22,7 @@ Vue.use(Modal);
 Vue.use(Checkbox);
 Vue.use(Pagination);
 Vue.use(Form);
+Vue.use(Badge);
 Vue.prototype.$message = message;
 
 new Vue({
