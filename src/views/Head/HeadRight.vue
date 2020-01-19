@@ -4,10 +4,13 @@
     <span class="head-content-right-info">
       <a-popover placement="bottom">
         <template slot="content">
-          <p v-for="(item,i) in message" :key="i">
-            <span class="messageUser">{{item.fromUser.userName}}</span>
-            {{item.type|filterMessage(item)}}
-          </p>
+          <div v-if="message.length>0">
+            <p v-for="(item,i) in message" :key="i">
+              <span class="messageUser">{{item.fromUser.userName}}</span>
+              {{item.type|filterMessage(item)}}
+            </p>
+          </div>
+          <div v-else>暂无最新消息</div>
         </template>
         <template slot="title">
           <span>最新消息通知</span>
@@ -33,7 +36,22 @@ export default {
     return {};
   },
   methods: {
-    messageLook() {}
+    //查看消息
+    messageLook() {
+      if (this.message.length > 0) {
+        let message = this.message.map(item => {
+          return item._id;
+        });
+        this.$axios
+          .post("/message/look", {
+            message
+          })
+          .then(res => {
+            if (res.status === 200) {
+            }
+          });
+      }
+    }
   },
   filters: {
     filterMessage(type, item) {
