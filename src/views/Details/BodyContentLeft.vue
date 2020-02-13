@@ -48,7 +48,7 @@
             展开阅读全文
             <a-icon type="down" />
           </div>
-          <div class="left-body-time">发布于{{moment(item.time).format("YYYY-MM-DD")}}</div>
+          <div class="left-body-time">发布于{{moment(item.createdTime).format("YYYY-MM-DD")}}</div>
           <div class="left-body-actions">
             <span class="left-body-actions-item">
               <a-button class="left-body-actions-up" icon="caret-up">赞同 {{item.like}}</a-button>

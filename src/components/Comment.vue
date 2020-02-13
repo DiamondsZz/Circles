@@ -18,7 +18,7 @@
               <img :src="root.user&&root.user.userImg" alt />
               {{root.user&&root.user.userName}}
             </span>
-            <span class="comment-body-item-head-r">{{moment(root.time).format("YYYY-MM-DD")}}</span>
+            <span class="comment-body-item-head-r">{{moment(root.createdTime).format("YYYY-MM-DD HH:mm")}}</span>
           </div>
           <div class="comment-body-item-body">
             <div class="comment-body-item-content">{{root.content}}</div>
@@ -82,7 +82,7 @@
                 {{child.userCommented&&child.userCommented.userName}}
               </span>
             </span>
-            <span class="comment-body-item-head-r">{{moment(child.time).format("YYYY-MM-DD")}}</span>
+            <span class="comment-body-item-head-r">{{moment(child.createdTime).format("YYYY-MM-DD HH:mm")}}</span>
           </div>
           <div class="comment-body-item-body">
             <div class="comment-body-item-content">{{child.content}}</div>
