@@ -175,15 +175,23 @@ export default {
     },
     //发布回答的评论内容
     publishRootComment() {
-      this.$emit("publishRootComment", { text: this.rootCommentContent });
+      if (!this.rootCommentContent.trim()) {
+        this.$message.error("评论内容不能为空");
+      } else {
+        this.$emit("publishRootComment", { text: this.rootCommentContent });
+      }
     },
     //发布评论的评论内容
     publishChildComment(commentId, userId) {
-      this.$emit("publishChildComment", {
-        text: this.childCommentContent,
-        commentId,
-        userId
-      });
+      if (!this.childCommentContent.trim()) {
+        this.$message.error("评论内容不能为空");
+      } else {
+        this.$emit("publishChildComment", {
+          text: this.childCommentContent,
+          commentId,
+          userId
+        });
+      }
     },
     //页面切换
     pageChange(currentPage) {

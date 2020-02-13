@@ -71,8 +71,14 @@ export default {
     likeClick(item) {},
     //获取问题数据
     getData() {
+      this.$store.commit("isLoad", {
+        isLoad: true
+      });
       this.$axios.get("/question/already").then(res => {
         if (res.status === 200) {
+          this.$store.commit("isLoad", {
+            isLoad: false
+          });
           this.recomData = res.data;
         }
       });
@@ -94,7 +100,7 @@ export default {
 /*内容左边部分*/
 .body .body-left {
   width: 694px;
-  height:100%;
+  height: 100%;
   background-color: #fff;
   margin-right: 10px;
   box-shadow: 0px 1px 3px rgba(26, 26, 26, 0.1);

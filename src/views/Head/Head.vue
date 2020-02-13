@@ -3,7 +3,7 @@
   <div class="head" :class="{'head-fixed':fixedTop}">
     <div class="head-content" :class="{'up-scroll':downScroll}">
       <head-left></head-left>
-      <head-right :message="message"></head-right>
+      <head-right :message="message" @mesLook="lookMessage" :messageCount="messageCount"></head-right>
     </div>
 
     <div class="head-details" :class="{'down-scroll':downScroll}">
@@ -36,8 +36,9 @@ export default {
   data() {
     return {
       downScroll: false,
-      fixedTop: false,  
-      message:[]  //消息数  
+      fixedTop: false,
+      message: [], //消息数
+      messageCount:0,
     };
   },
   methods: {
@@ -47,7 +48,8 @@ export default {
         .get("/message/get", { params: { id: this.$store.state.user._id } })
         .then(res => {
           if (res.status === 200) {
-            this.message=res.data;
+            this.message = res.data.messages;
+            this.messageCount=res.data.count;
           }
         });
     },
@@ -60,7 +62,7 @@ export default {
       document.documentElement.scrollTop = 200;
     },
     getData() {
-      this.$axios
+      return this.$axios
         .get("/question/details", {
           params: {
             questionId: this.$store.state.questionCurrent._id,
@@ -80,28 +82,34 @@ export default {
           question: this.$store.state.questionCurrent._id,
           user: this.$store.state.user._id
         })
-        .then(async res => {
+        .then(res => {
           if (res.status === 200) {
-            await this.getData();
-            if (this.$store.state.questionCurrent.isFollow) {
-              await this.$message.success("取消成功");
-            } else {
-              await this.$message.success("关注成功");
-            }
+            return this.getData();
           }
         })
         .then(() => {
+          //添加消息通知
           this.$axios
             .post("/message/create", {
               type: this.$store.state.questionCurrent.isFollow ? 1 : 0,
               fromUser: this.$store.state.user._id, //当前用户
-              user: this.$store.state.questionCurrent.user._id //关注的用户
+              user: this.$store.state.questionCurrent.user._id, //关注的用户
+              question: this.id
             })
             .then(res => {
               if (res.status === 200) {
+                if (this.$store.state.questionCurrent.isFollow) {
+                  this.$message.success("关注成功");
+                } else {
+                  this.$message.success("取消成功");
+                }
               }
             });
         });
+    },
+    //接受子组件消息通知点击回调
+    lookMessage() {
+      this.getMessage();
     }
   },
   watch: {

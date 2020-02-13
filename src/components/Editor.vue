@@ -41,7 +41,6 @@ export default {
   methods: {},
   watch: {
     isClickEditor(val) {
-      console.log(this.content);
       this.$emit("editorContent", this.content);
     }
   },

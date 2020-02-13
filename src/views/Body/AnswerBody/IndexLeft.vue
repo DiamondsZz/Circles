@@ -38,8 +38,14 @@ export default {
   methods: {
     //获取回答数据
     getData() {
+      this.$store.commit("isLoad", {
+        isLoad: true
+      });
       this.$axios.get("/question/get").then(res => {
         if (res.status === 200) {
+          this.$store.commit("isLoad", {
+            isLoad: false
+          });
           this.data = res.data;
         }
       });
@@ -65,7 +71,7 @@ export default {
 /*内容左边部分*/
 .body .body-left {
   width: 694px;
-  height:100%;
+  height: 100%;
   background-color: #fff;
   margin-right: 10px;
 }

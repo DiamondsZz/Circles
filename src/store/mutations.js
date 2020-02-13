@@ -10,5 +10,8 @@ export default {
   questionCurrent(state, { question }) {
     state.questionCurrent = question;
     sessionStorage.setItem("questionCurrent", JSON.stringify(question))
+  },
+  isLoad(state, { isLoad }) {
+    state.isLoad = isLoad;
   }
 }

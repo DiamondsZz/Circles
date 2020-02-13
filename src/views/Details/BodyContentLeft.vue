@@ -79,7 +79,7 @@
             :comment="comments"
             :commentTotal="item.commentCount"
             @publishChildComment="publishCommentChild(arguments,i)"
-            @publishRootComment="publishCommentRoot(arguments,item._id,item.questionId,i)"
+            @publishRootComment="publishCommentRoot(arguments,item._id,item.questionId,i,item.user._id)"
             @pageChange="commentPageChange"
           ></comment>
         </div>
@@ -130,16 +130,25 @@ export default {
 
     //获取回答数据
     getData() {
+      this.$store.commit("isLoad", {
+        isLoad: true
+      });
       return this.$axios
         .get("/answer/get", { params: { questionId: this.id } })
         .then(res => {
           if (res.status === 200) {
+            this.$store.commit("isLoad", {
+              isLoad: false
+            });
             this.$set(this.details, "answers", res.data);
           }
         });
     },
     //提交回答
     writeAnswer() {
+      this.$store.commit("isLoad", {
+        isLoad: true
+      });
       this.$axios
         .post("/answer/write", {
           user: this.$store.state.user._id,
@@ -148,15 +157,36 @@ export default {
         })
         .then(res => {
           if (res.status === 200) {
-            this.getData();
+            return this.getData();
           }
+        })
+        .then(() => {
+          //添加消息通知
+          this.$axios
+            .post("/message/create", {
+              type: 3,
+              fromUser: this.$store.state.user._id, //当前用户
+              user: this.$store.state.questionCurrent.user._id, //关注的用户
+              question: this.id
+            })
+            .then(res => {
+              if (res.status === 200) {
+                this.$store.commit("isLoad", {
+                  isLoad: false
+                });
+              }
+            });
         });
     },
     //回答内容提交
     async questionSend() {
       this.isClickEditor = !this.isClickEditor; //监听编辑器的状态   是否点击发布问题按钮
       await this.getEditorContent(); //直到获取编辑器最新内容更新才执行下一步
-      this.writeAnswer();
+      if (!this.quesContent.replace(new RegExp("<.+?>", "g"), "").trim()) {
+        this.$message.error("回答内容不能为空");
+      } else {
+        this.writeAnswer();
+      }
     },
 
     //获取编辑器返回的文本内容
@@ -165,12 +195,16 @@ export default {
     },
 
     //发布回答评论
-    publishCommentRoot(param, answerId, questionId, i) {
+    publishCommentRoot(param, answerId, questionId, i, userId) {
+      this.$store.commit("isLoad", {
+        isLoad: true
+      });
+      //userId  当前评论用户
       //子组件传递参数通过父组件触发事件的arguments参数进行接收,该arguments是个参数数组 ,子组件传递参数为对象时,对应arguments[0]
       let { text } = param[0];
       this.$axios
         .post("/comment/root/publish", {
-          user: this.$store.state.user._id,
+          user: this.$store.state.user._id, //当前的用户
           questionId,
           answerId,
           content: text
@@ -181,11 +215,29 @@ export default {
             await this.getData();
             this.$set(this.details.answers[i], "isShowComment", true); //保持评论处于展开状态
             this.$message.success("发布成功");
+            //添加消息通知
+            await this.$axios
+              .post("/message/create", {
+                type: 2,
+                fromUser: this.$store.state.user._id, //当前用户
+                user: userId, //评论的用户
+                question: this.id
+              })
+              .then(res => {
+                if (res.status === 200) {
+                  this.$store.commit("isLoad", {
+                    isLoad: false
+                  });
+                }
+              });
           }
         });
     },
     //发布评论的评论
     publishCommentChild(param, i) {
+      this.$store.commit("isLoad", {
+        isLoad: true
+      });
       this.$axios
         .post("/comment/child/publish", {
           content: param[0].text,
@@ -199,6 +251,21 @@ export default {
             await this.getData();
             this.$set(this.details.answers[i], "isShowComment", true); //保持评论处于展开状态
             this.$message.success("发布成功");
+            //添加消息通知
+            await this.$axios
+              .post("/message/create", {
+                type: 2,
+                fromUser: this.$store.state.user._id, //当前用户
+                user: param[0].userId, //评论的用户
+                question: this.id
+              })
+              .then(res => {
+                if (res.status === 200) {
+                  this.$store.commit("isLoad", {
+                    isLoad: false
+                  });
+                }
+              });
           }
         });
     },
@@ -224,12 +291,18 @@ export default {
     //监听问题详情界面  问题回答面板是否显示
     "$store.state.questionModal"(val) {
       this.questionModal = val;
+    },
+    //监听路由参数改变  组件数据更新
+    $route() {
+      this.id = this.$route.query.id;
+      this.getData();
     }
   },
 
   created() {
     this.getData();
   },
+
   components: { Comment, Editor }
 };
 </script>

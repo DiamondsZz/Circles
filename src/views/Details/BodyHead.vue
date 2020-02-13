@@ -60,7 +60,10 @@
         >
           <a-icon type="edit" />写回答
         </a-button>
-        <a-button class="details-body-head-actions-item details-body-head-actions-btn">
+        <a-button
+          class="details-body-head-actions-item details-body-head-actions-btn"
+          @click="invitAnswer"
+        >
           <a-icon type="team" />邀请回答
         </a-button>
         <span
@@ -83,6 +86,7 @@
       </div>
     </div>
 
+    <!--评论面板 -->
     <a-modal
       :width="700"
       :visible="comment.commentVisible"
@@ -96,6 +100,27 @@
         :commentTotal="comment.commentContent&&comment.commentContent.length"
       ></comment>
     </a-modal>
+
+    <!--邀请回答面板 -->
+    <a-modal
+      :width="700"
+      :visible="invitVisible"
+      title="你可以邀请下面用户，快速获得回答"
+      :footer="null"
+      @cancel="invitVisible=false"
+    >
+      <div class="user-invit" v-for="(item,i) in inviteUsers" :key="i">
+        <div class="user-invit-left">
+          <span class="user-invite-img">
+            <img :src="item.userImg" alt />
+          </span>
+          <span class="user-invite-name">{{item.userName}}</span>
+        </div>
+        <div class="user-invit-right">
+          <a-button @click="$message.error('目前暂不支持该功能！')">邀请回答</a-button>
+        </div>
+      </div>
+    </a-modal>
   </div>
 </template>
 
@@ -104,21 +129,29 @@ import Comment from "@/components/Comment";
 export default {
   data() {
     return {
+      invitVisible: false, //邀请回答面板
       id: this.$route.query.id,
       comment: {
         commentVisible: false,
         commentContent: []
-      }
+      },
+      inviteUsers: []
     };
   },
   methods: {
     getData() {
-      this.$axios
+      this.$store.commit("isLoad", {
+        isLoad: true
+      });
+      return this.$axios
         .get("/question/details", {
           params: { questionId: this.id, userId: this.$store.state.user._id }
         })
         .then(res => {
           if (res.status === 200) {
+            this.$store.commit("isLoad", {
+              isLoad: false
+            });
             let details = res.data;
             details.isShowTotal = false;
             details.tags = ["马云", "互联网", "BAT"];
@@ -142,11 +175,7 @@ export default {
       this.$store.commit("questionCurrent", { question });
     },
     showComment() {
-      let question = JSON.parse(
-        JSON.stringify(this.$store.state.questionCurrent)
-      );
-      question.commentVisible = true;
-      this.$store.commit("questionCurrent", { question });
+      this.$set(this.comment, "commentVisible", true);
     },
     //写回答
     writeAnswer() {
@@ -156,19 +185,17 @@ export default {
     },
     //关注问题
     followQuestion() {
+      this.$store.commit("isLoad", {
+        isLoad: true
+      });
       this.$axios
         .post("/follow/question", {
           question: this.id,
           user: this.$store.state.user._id
         })
-        .then(async res => {
+        .then(res => {
           if (res.status === 200) {
-            await this.getData();
-            if (this.$store.state.questionCurrent.isFollow) {
-              await this.$message.success("取消成功");
-            } else {
-              await this.$message.success("关注成功");
-            }
+            return this.getData();
           }
         })
         .then(() => {
@@ -176,12 +203,32 @@ export default {
             .post("/message/create", {
               type: this.$store.state.questionCurrent.isFollow ? 1 : 0,
               fromUser: this.$store.state.user._id, //当前用户
-              user: this.$store.state.questionCurrent.user._id //关注的用户
+              user: this.$store.state.questionCurrent.user._id, //关注的用户
+              question: this.id
             })
             .then(res => {
               if (res.status === 200) {
+                this.$store.commit("isLoad", {
+                  isLoad: false
+                });
+                if (this.$store.state.questionCurrent.isFollow) {
+                  this.$message.success("关注成功");
+                } else {
+                  this.$message.success("取消成功");
+                }
               }
             });
+        });
+    },
+    //邀请回答
+    invitAnswer() {
+      this.invitVisible = true;
+      this.$axios
+        .get("/answer/invite", { params: { questionId: this.id } })
+        .then(res => {
+          if (res.status === 200) {
+            this.inviteUsers = res.data;
+          }
         });
     }
   },
@@ -200,6 +247,12 @@ export default {
       }
     }
   },
+  watch: {
+    $route() {
+      this.id = this.$route.query.id;
+      this.getData();
+    }
+  },
   created() {
     this.getData();
   },
@@ -216,6 +269,7 @@ export default {
   width: 1000px;
   margin: 0 auto;
   padding: 16px;
+  background-color: #fff;
 }
 
 .details-body-head-content {
@@ -311,5 +365,23 @@ export default {
 .details-body-head-actions .details-body-head-actions-up {
   color: #8590a6;
   cursor: pointer;
+}
+
+/*邀请回答面板*/
+.user-invit {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #f6f6f6;
+  padding: 14px 0;
+}
+.user-invite-img img {
+  width: 30px;
+  border-radius: 30px;
+}
+.user-invite-name {
+  margin-left: 20px;
+  font-size: 16px;
+  font-weight: bold;
 }
 </style>

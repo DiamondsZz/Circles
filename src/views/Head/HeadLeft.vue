@@ -2,8 +2,7 @@
 <template>
   <div class="head-content-left">
     <div class="head-content-left-logo">
-      <img src="@/assets/logo.png" alt="">
-
+      <img src="@/assets/logo.png" alt />
     </div>
     <div class="head-content-left-menu">
       <div
@@ -133,9 +132,9 @@ export default {
         this.quesTip = "至少输入4个字";
       } else if (this.quesTil.length <= 50) {
         this.quesTip = "";
-        if (this.quesTil.length > 40) {
-          this.quesTip = `还可以输入${50 - this.quesTil.length}个字`;
-        }
+        // if (this.quesTil.length > 40) {
+        //   this.quesTip = `还可以输入${50 - this.quesTil.length}个字`;
+        // }
       } else if (this.quesTil.length > 50) {
         this.quesTip = `已超出${this.quesTil.length - 50}个字`;
       } else if (this.quesTil.length > 80) {
@@ -147,23 +146,49 @@ export default {
     async questionSend() {
       this.isClickEditor = !this.isClickEditor; //监听编辑器的状态   是否点击发布问题按钮
       await this.getEditorContent(); //直到获取编辑器最新内容更新才执行下一步
-      this.$axios
-        .post("/question/ask", {
-          user:this.$store.state.user._id,
-          til: this.quesTil,
-          content: this.quesContent
-        })
-        .then(res => {
-          console.log(res);
-          if (res.status === 200) {
-            this.questionModal = false;
-          }
+
+      if (this.checkQuestion()) {
+        this.$store.commit("isLoad", {
+          isLoad: true
         });
+        this.$axios
+          .post("/question/ask", {
+            user: this.$store.state.user._id,
+            til: this.quesTil,
+            content: this.quesContent
+          })
+          .then(res => {
+            if (res.status === 200) {
+              this.$store.commit("isLoad", {
+                isLoad: false
+              });
+              this.questionModal = false;
+              this.$message.success("发布成功");
+            }
+          });
+      }
     },
 
     //获取编辑器返回的文本内容
     getEditorContent(content) {
       this.quesContent = content;
+    },
+    checkQuestion() {
+      if (this.quesTil === "") {
+        this.$message.error("问题标题不能为空");
+        return false;
+      } else {
+        if (this.quesTip !== "") {
+          this.$message.error(this.quesTip);
+          return false;
+        } else {
+          if (!this.quesContent.trim()) {
+            this.$message.error("请详细描述你的问题");
+            return false;
+          }
+        }
+      }
+      return true;
     }
   },
   watch: {
@@ -185,9 +210,9 @@ export default {
   display: flex;
   align-items: center;
 }
-.head-content-left-logo img{
-  width:100px;
-  height:40px;
+.head-content-left-logo img {
+  width: 100px;
+  height: 40px;
 }
 .head-content-left-menu {
   display: flex;
