@@ -7,6 +7,7 @@ import Index from "../views/Index/Index.vue"
 import IndexBody from "../views/Body/IndexBody/Index.vue"
 import FindBody from "../views/Body/FindBody/Index.vue"
 import AnswerBody from "../views/Body/AnswerBody/Index.vue"
+import MessageBody from "../views/Body/MessageBody/Index.vue"
 import Details from "../views/Details/Index.vue"
 import Login from "../views/Login/Index.vue"
 
@@ -35,6 +36,12 @@ export default new VueRouter({
                 component: AnswerBody,
                 meta: {
                     name: "等你来答"
+                }
+            }, {
+                path: '/message',
+                component: MessageBody,
+                meta: {
+                    name: "通知中心"
                 }
             },
         ]

@@ -14,7 +14,7 @@
                 @click="showQuestion(item)"
               >{{item.question.til}}</span>
             </p>
-            <div class="message-more">查看更多</div>
+            <div class="message-more" @click="showMessages">查看更多</div>
           </div>
           <div v-else>暂无最新消息</div>
         </template>
@@ -71,11 +71,17 @@ export default {
     },
     //进入问题页面
     showQuestion(message) {
-      console.log(this.$route);
       if (this.$route.query.id !== message.question._id) {
-        this.$router.replace({
+        this.$router.push({
           path: "details",
           query: { id: message.question._id }
+        });
+      }
+    },
+    showMessages() {
+      if (this.$route.path !== "/message") {
+        this.$router.push({
+          path: "message"
         });
       }
     }
