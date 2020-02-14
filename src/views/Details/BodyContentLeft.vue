@@ -157,6 +157,7 @@ export default {
         })
         .then(res => {
           if (res.status === 200) {
+            this.$message.success("提交成功");
             return this.getData();
           }
         })

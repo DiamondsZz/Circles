@@ -3,17 +3,17 @@
   <div class="body-left">
     <div class="message-list">
       <div class="message-head">通知中心</div>
-      <div class="message-items">
-        <div class="message-time">2012-8</div>
-        <div class="message-item" v-for="(item,i) in data" :key="i">
+      <div class="message-items" v-for="(item,i) in data" :key="i">
+        <div class="message-time">{{item[0]}}</div>
+        <div class="message-item" v-for="(val,j) in item[1]" :key="j">
           <div class="message-item-img">
             <img src="https://pic1.zhimg.com/v2-0bdcd6c43a2ecfe0dfbe72cc3cc3e83e_60w.png" alt />
           </div>
           <div class="message-item-text">
             <div
               class="message-item-user"
-            >{{item.fromUser.userName}}{{item.type|filterMessage(item)}} · {{moment(item.createdTime).format("HH:mm:ss")}}</div>
-            <div class="message-item-til" @click="showQuestion(item)">{{item.question.til}}</div>
+            >{{val.fromUser.userName}}{{val.type|filterMessage(val)}} · {{moment(val.createdTime).format("HH:mm:ss")}}</div>
+            <div class="message-item-til" @click="showQuestion(val)">{{val.question.til}}</div>
           </div>
         </div>
       </div>
