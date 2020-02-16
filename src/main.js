@@ -6,6 +6,9 @@ import 'ant-design-vue/dist/antd.css'
 import "./assets/css/public.css"
 import "./axios";
 import store from "./store"
+import echarts from 'echarts'
+
+
 
 Vue.config.productionTip = false
 
@@ -24,7 +27,7 @@ Vue.use(Pagination);
 Vue.use(Form);
 Vue.use(Badge);
 Vue.prototype.$message = message;
-
+Vue.prototype.$echarts = echarts
 new Vue({
     store,
     router: VueRouter,

@@ -43,13 +43,13 @@ export default {
           });
           this.$axios.post("/login", { phone, password }).then(async res => {
             if (res.data.code === 1) {
-              await this.$store.commit("user", {
+              this.$store.commit("user", {
                 user: res.data.user
               });
               this.$store.commit("isLoad", {
                 isLoad: false
               });
-              await this.$router.push("/");
+              this.$router.push("/");
             } else if (res.data.code === -1) {
               this.$message.error("手机号或密码不正确");
               this.$store.commit("isLoad", {

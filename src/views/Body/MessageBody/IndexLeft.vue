@@ -12,7 +12,7 @@
           <div class="message-item-text">
             <div
               class="message-item-user"
-            >{{val.fromUser.userName}}{{val.type|filterMessage(val)}} · {{moment(val.createdTime).format("HH:mm:ss")}}</div>
+            >{{val.fromUser&&val.fromUser.userName}}{{val.type|filterMessage(val)}} · {{moment(val.createdTime).format("HH:mm:ss")}}</div>
             <div class="message-item-til" @click="showQuestion(val)">{{val.question.til}}</div>
           </div>
         </div>
