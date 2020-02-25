@@ -63,6 +63,33 @@
           <editor class="editor" :isClickEditor="isClickEditor" @editorContent="getEditorContent"></editor>
         </div>
       </transition>
+      <div class="ques-type">
+        <span v-if="tags.length>0">
+          <a-tag
+            color="#0084ff"
+            closable
+            v-for="(item,i) in tags "
+            :key="i"
+            @close="closeTag(item,i)"
+          >{{item}}</a-tag>
+        </span>
+        <span>
+          <a-auto-complete
+            v-if="isAddTag"
+            size="small"
+            class="ques-search"
+            :dataSource="quesTypes"
+            @select="quesTypeSelect"
+            @search="quesTypeSearch"
+            @blur="isAddTag=false"
+          />
+          <span v-if="!isAddTag&&tags.length<5" @click="isAddTag=!isAddTag">
+            <a-icon type="plus"></a-icon>添加话题
+            <span v-if="tags.length===0">(至少添加一个话题)</span>
+            <span v-if="tags.length>0">({{tags.length}}/5)</span>
+          </span>
+        </span>
+      </div>
       <div class="ques-foot">
         <a-checkbox>匿名提问</a-checkbox>
         <a-button class="ques-btn" type="primary" @click="questionSend">发布问题</a-button>
@@ -86,7 +113,12 @@ export default {
       quesTil: "",
       quesTip: "",
       isClickEditor: false,
-      quesContent: ""
+      quesContent: "",
+      quesText: "",
+      quesCover: "",
+      tags: [], //问题分类
+      isAddTag: false, //是否添加分类
+      quesTypes: []
     };
   },
   methods: {
@@ -146,7 +178,6 @@ export default {
     async questionSend() {
       this.isClickEditor = !this.isClickEditor; //监听编辑器的状态   是否点击发布问题按钮
       await this.getEditorContent(); //直到获取编辑器最新内容更新才执行下一步
-
       if (this.checkQuestion()) {
         this.$store.commit("isLoad", {
           isLoad: true
@@ -155,7 +186,9 @@ export default {
           .post("/question/ask", {
             user: this.$store.state.user._id,
             til: this.quesTil,
-            content: this.quesContent
+            content: this.quesContent,
+            text: this.quesText,
+            type: this.tags
           })
           .then(res => {
             if (res.status === 200) {
@@ -170,25 +203,53 @@ export default {
     },
 
     //获取编辑器返回的文本内容
-    getEditorContent(content) {
-      this.quesContent = content;
+    getEditorContent(val) {
+      if (val) {
+        this.quesContent = val.content;
+        this.quesText = val.text;
+      }
     },
     checkQuestion() {
       if (this.quesTil === "") {
         this.$message.error("问题标题不能为空");
+        return false;
+      } else if (this.tags.length === 0) {
+        this.$message.error("至少添加一个话题");
         return false;
       } else {
         if (this.quesTip !== "") {
           this.$message.error(this.quesTip);
           return false;
         } else {
-          if (!this.quesContent.trim()) {
-            this.$message.error("请详细描述你的问题");
-            return false;
+          if (!this.quesText.trim()) {
+            if (this.quesContent.indexOf('img') === -1) {
+              this.$message.error("请详细描述你的问题");
+              return false;
+            }
           }
         }
       }
       return true;
+    },
+    //问题类型选择
+    quesTypeSelect(item) {
+      if (this.tags.indexOf(item) !== -1) {
+        this.$message.error("已经添加过该话题");
+      } else {
+        this.tags.push(item);
+        this.isAddTag = false;
+      }
+    },
+    //问题类型查询
+    quesTypeSearch(des) {
+      this.$axios.get("/question/type/get", { params: { des } }).then(res => {
+        if (res.status === 200) {
+          this.quesTypes = res.data;
+        }
+      });
+    },
+    closeTag(item, i) {
+      this.tags.splice(i, 1);
     }
   },
   watch: {
@@ -320,7 +381,15 @@ export default {
 .ques-des {
   margin: 10px 0;
 }
-
+.ques-search {
+  width: 160px;
+  margin: 0 10px;
+}
+.ques-type {
+  color: #0084ff;
+  margin-bottom: 16px;
+  cursor: pointer;
+}
 /*编辑器*/
 
 .editor >>> .ql-container {

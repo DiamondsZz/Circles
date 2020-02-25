@@ -104,6 +104,7 @@ export default {
       questionModal: this.$store.state.questionModal,
       isClickEditor: false,
       quesContent: "",
+      quesText:'',
       details: {
         answers: []
       },
@@ -153,7 +154,8 @@ export default {
         .post("/answer/write", {
           user: this.$store.state.user._id,
           questionId: this.id,
-          content: this.quesContent
+          content: this.quesContent,
+          text:this.quesText,
         })
         .then(res => {
           if (res.status === 200) {
@@ -183,7 +185,7 @@ export default {
     async questionSend() {
       this.isClickEditor = !this.isClickEditor; //监听编辑器的状态   是否点击发布问题按钮
       await this.getEditorContent(); //直到获取编辑器最新内容更新才执行下一步
-      if (!this.quesContent.replace(new RegExp("<.+?>", "g"), "").trim()) {
+      if (!this.quesText.trim()) {
         this.$message.error("回答内容不能为空");
       } else {
         this.writeAnswer();
@@ -191,8 +193,9 @@ export default {
     },
 
     //获取编辑器返回的文本内容
-    getEditorContent(content) {
-      this.quesContent = content;
+    getEditorContent(val) {
+      this.quesContent = val.content;
+      this.quesText = val.text;
     },
 
     //发布回答评论

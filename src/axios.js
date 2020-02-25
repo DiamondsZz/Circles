@@ -1,7 +1,6 @@
 import Vue from "vue";
 import axios from "axios";
 import qs from "qs";
-
 axios.interceptors.request.use(request => {
 	request.url = "/circles" + request.url;
 	if (

@@ -1,18 +1,18 @@
 <template>
   <div id="app">
     <router-view></router-view>
-    <empty :visible="$store.state.isLoad"></empty>
+    <loading :visible="$store.state.isLoad"></loading>
   </div>
 </template>
 <script>
-import Empty from "@/components/Empty";
+import Loading from "@/components/Loading";
 export default {
   name: "app",
   data() {
     return {};
   },
   components: {
-    Empty
+    Loading
   }
 };
 </script>

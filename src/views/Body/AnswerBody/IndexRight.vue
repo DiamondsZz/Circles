@@ -3,7 +3,7 @@
   <div class="body-right">
     <div class="body-right-write">
       <div class="body-right-write-items">
-        <a class="body-right-write-item" href="http://localhost:8080/#/answer">
+        <a class="body-right-write-item" href="http://localhost:8080/answer">
           <span class="body-right-write-item-icon">
             <a-icon type="form" />
           </span>

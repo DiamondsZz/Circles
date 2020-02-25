@@ -17,6 +17,9 @@ export default {
           left: "center",
           text: this.til
         },
+        grid:{
+        bottom:220,
+        },
         xAxis: {
           type: "category",
           data: this.data.x.map(item => {
@@ -82,6 +85,6 @@ export default {
 <style scoped>
 #chart {
   width: 360px;
-  height: 300px;
+  height: 500px;
 }
 </style>

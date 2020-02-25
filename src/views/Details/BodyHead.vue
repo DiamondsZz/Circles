@@ -6,11 +6,11 @@
         <div class="details-body-head-content-left">
           <div
             class="details-body-head-content-left-tags"
-            v-if="this.$store.state.questionCurrent.tags&&this.$store.state.questionCurrent.tags.length>0"
+            v-if="this.$store.state.questionCurrent.type&&this.$store.state.questionCurrent.type.length>0"
           >
             <a-tag
               color="blue"
-              v-for="(item,i) in this.$store.state.questionCurrent.tags"
+              v-for="(item,i) in this.$store.state.questionCurrent.type"
               :key="i"
             >{{item}}</a-tag>
           </div>
@@ -154,8 +154,7 @@ export default {
             });
             let details = res.data;
             details.isShowTotal = false;
-            details.tags = ["马云", "互联网", "BAT"];
-            this.$store.commit("questionCurrent", { question: details });
+            this.$store.commit("questionCurrent", { question: details });       
           }
         });
     },

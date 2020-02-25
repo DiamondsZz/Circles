@@ -13,6 +13,7 @@ import Login from "../views/Login/Index.vue"
 
 Vue.use(VueRouter);
 export default new VueRouter({
+    mode: 'history',
     routes: [{
         path: '/',
         component: Index,
@@ -44,12 +45,21 @@ export default new VueRouter({
                     name: "通知中心"
                 }
             },
-        ]
+        ],
+        meta: {
+            name: "index"
+        }
     }, {
         path: '/details',
         component: Details,
+        meta: {
+            name: "details"
+        }
     }, {
         path: '/login',
         component: Login,
+        meta: {
+            name: "login"
+        }
     }]
 })

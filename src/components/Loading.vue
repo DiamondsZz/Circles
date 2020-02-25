@@ -1,6 +1,6 @@
 <template>
-  <div id="empty" class="empty" v-if="visiblity">
-    <a-icon class="icon-empty" type="loading"></a-icon>
+  <div id="loading" class="loading" v-if="visiblity">
+    <a-icon class="icon-loading" type="loading"></a-icon>
   </div>
 </template>
 <script>
@@ -21,7 +21,7 @@ export default {
 };
 </script>
 <style scoped>
-.empty {
+.loading {
   position: absolute;
   top: 0;
   z-index: 999;
@@ -31,7 +31,7 @@ export default {
   justify-content: center;
   align-items: center;
 }
-.icon-empty {
+.icon-loading {
   font-size: 40px;
   color: #0084ff;
 }
