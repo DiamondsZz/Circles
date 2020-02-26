@@ -15,13 +15,21 @@
       </div>
     </div>
     <div class="head-content-left-action">
-      <a-input-search
+      <a-auto-complete
         class="head-content-left-search"
         :class="{'head-content-left-search-focus':!quesBtn}"
         @change="search"
         @focus="focus"
         @blur="blur"
-      />
+      >
+        <template slot="dataSource">
+          <a-select-option
+            v-for="(ques) in quesSearchRelative"
+            :key="ques.til"
+            @click="showQuestion(ques)"
+          >{{ques.til}}</a-select-option>
+        </template>
+      </a-auto-complete>
       <transition name="head-content-left-question">
         <a-button
           class="head-content-left-question"
@@ -45,12 +53,25 @@
           <img :src="$store.state.user.userImg" alt />
         </div>
         <div class="ques-til-r">
-          <div class="ques-til-inp">
-            <a-textarea
+          <div class="ques-til-input">
+            <a-auto-complete
+              class="ques-til-inp"
               v-model="quesTil"
               placeholder="写下你的问题，准确地描述问题更容易得到解答"
+              :open="quesTilOpen"
+              @blur="quesTilBlur"
+              @focus="quesTilFocus"
               @change="quesTilChange"
-            ></a-textarea>
+            >
+              <template slot="dataSource">
+                <a-select-option v-if="quesSearchRelative.length>0" disabled key="til">相关类似问题</a-select-option>
+                <a-select-option
+                  v-for="(ques) in quesSearchRelative"
+                  :key="ques.til"
+                  @click="showQuestion(ques)"
+                >{{ques.til}}</a-select-option>
+              </template>
+            </a-auto-complete>
           </div>
           <div
             class="ques-til-mes"
@@ -100,9 +121,11 @@
 
 <script>
 import Editor from "../../components/Editor";
+import Lodash from "lodash";
 export default {
   data() {
     return {
+      thisPointer: this,
       //当前导航菜单
       menuCurrent: this.$route.meta.name, //初始值为当前激活路由的元信息name。（组件创建时进行当前菜单选项的初始化）
       //提问按钮显示与否
@@ -118,7 +141,9 @@ export default {
       quesCover: "",
       tags: [], //问题分类
       isAddTag: false, //是否添加分类
-      quesTypes: []
+      quesTypes: [],
+      quesSearchRelative: [], //搜索相关问题
+      quesTilOpen: true
     };
   },
   methods: {
@@ -126,8 +151,27 @@ export default {
     router(path) {
       this.$router.push(path);
     },
+    //进入问题页面
+    showQuestion(item) {
+      if (this.$route.query.id !== item._id) {
+        this.$router.push({
+          path: "details",
+          query: { id: item._id }
+        });
+      }
+    },
     //搜索框进行搜索
-    search() {},
+    search: Lodash.debounce(function(val) {
+      if (val.trim() !== "") {
+        this.$axios
+          .post("/question/get/search", { search: val.trim() })
+          .then(res => {
+            if (res.status === 200) {
+              this.quesSearchRelative = res.data;
+            }
+          });
+      }
+    }, 500),
     //搜索框聚焦
     focus() {
       this.quesBtn = false;
@@ -136,7 +180,6 @@ export default {
     blur() {
       this.quesBtn = true;
     },
-
     //头部菜单点击
     menuClick(menu) {
       this.menuCurrent = menu;
@@ -159,7 +202,10 @@ export default {
       this.questionModal = true;
     },
     //问题输入框内容改变
-    quesTilChange() {
+    quesTilChange: Lodash.debounce(function(val) {
+      //问题标题为空时对应的自动提示隐藏
+      this.quesTilAutoComplete();
+      //对用户输入进行校验
       if (this.quesTil.length < 4) {
         this.quesTip = "至少输入4个字";
       } else if (this.quesTil.length <= 50) {
@@ -172,8 +218,32 @@ export default {
       } else if (this.quesTil.length > 80) {
         this.quesTip = "最多输入50个字";
       }
+      if (val.trim() !== "") {
+        this.$axios
+          .post("/question/get/search", { search: val.trim() })
+          .then(res => {
+            if (res.status === 200) {
+              this.quesSearchRelative = res.data;
+            }
+          });
+      }
+    }, 500),
+    //问题标题自动提示框显示校验
+    quesTilAutoComplete() {
+      if (this.quesTil.trim() === "") {
+        this.quesTilOpen = false;
+      } else {
+        this.quesTilOpen = true;
+      }
     },
-
+    //问题标题失去焦点
+    quesTilBlur() {
+      this.quesTilOpen = false;
+    },
+    //问题标题获得焦点
+    quesTilFocus() {
+      this.quesTilOpen = true;
+    },
     //提问内容提交
     async questionSend() {
       this.isClickEditor = !this.isClickEditor; //监听编辑器的状态   是否点击发布问题按钮
@@ -185,7 +255,7 @@ export default {
         this.$axios
           .post("/question/ask", {
             user: this.$store.state.user._id,
-            til: this.quesTil,
+            til: this.quesTil.trim(),
             content: this.quesContent,
             text: this.quesText,
             type: this.tags,
@@ -211,6 +281,12 @@ export default {
         this.quesCover = val.cover;
       }
     },
+    judgeIsHasQues() {
+      let res = this.quesSearchRelative.find(ques => {
+        return ques.til === this.quesTil;
+      });
+      return !!res;
+    },
     checkQuestion() {
       if (this.quesTil === "") {
         this.$message.error("问题标题不能为空");
@@ -227,6 +303,21 @@ export default {
             if (this.quesContent.indexOf("img") === -1) {
               this.$message.error("请详细描述你的问题");
               return false;
+            }
+          } else {
+            if (
+              this.quesTil.slice(this.quesTil.length - 1) !== "？" &&
+              this.quesTil.slice(this.quesTil.length - 1) !== "?"
+            ) {
+              this.$message.error("问题标题请以问号结尾");
+              return false;
+            } else {
+              if (this.judgeIsHasQues()) {
+                this.$message.error("该问题已经存在");
+                return false;
+              } else {
+                return true;
+              }
             }
           }
         }
@@ -357,10 +448,7 @@ export default {
 .ques-til .ques-til-r {
   flex-grow: 1;
 }
-.ques-til .ques-til-r .ques-til-inp {
-  height: 40px;
-}
-.ques-til .ques-til-r .ques-til-inp textarea {
+.ques-til .ques-til-r .ques-til-input .ques-til-inp {
   width: 100%;
   height: 100%;
   padding: 5px;

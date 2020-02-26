@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import VueRouter from "./router"
 import App from './App.vue'
-import {Upload, AutoComplete, Button, Input, Icon, message, Avatar, List, Tabs, Popover, Tag, Modal, Checkbox, Pagination,Form,Badge} from 'ant-design-vue'
+import { Select, Upload, AutoComplete, Button, Input, Icon, message, Avatar, List, Tabs, Popover, Tag, Modal, Checkbox, Pagination,Form,Badge} from 'ant-design-vue'
 import 'ant-design-vue/dist/antd.css'
 import "./assets/css/public.css"
 import "./axios";
@@ -29,6 +29,7 @@ Vue.use(Form);
 Vue.use(Badge);
 Vue.use(AutoComplete);
 Vue.use(Upload);
+Vue.use(Select)
 Vue.prototype.$message = message;
 Vue.prototype.$echarts = echarts
 new Vue({
