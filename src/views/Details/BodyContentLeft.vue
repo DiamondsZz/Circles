@@ -104,7 +104,7 @@ export default {
       questionModal: this.$store.state.questionModal,
       isClickEditor: false,
       quesContent: "",
-      quesText:'',
+      quesText: "",
       details: {
         answers: []
       },
@@ -155,7 +155,7 @@ export default {
           user: this.$store.state.user._id,
           questionId: this.id,
           content: this.quesContent,
-          text:this.quesText,
+          text: this.quesText
         })
         .then(res => {
           if (res.status === 200) {
@@ -183,9 +183,11 @@ export default {
     },
     //回答内容提交
     async questionSend() {
+      let isHasImg;
       this.isClickEditor = !this.isClickEditor; //监听编辑器的状态   是否点击发布问题按钮
       await this.getEditorContent(); //直到获取编辑器最新内容更新才执行下一步
-      if (!this.quesText.trim()) {
+      isHasImg = this.quesContent.match(new RegExp("<img.+?>", "g"));
+      if (!this.quesText.trim() && !!!isHasImg) {
         this.$message.error("回答内容不能为空");
       } else {
         this.writeAnswer();
@@ -194,8 +196,10 @@ export default {
 
     //获取编辑器返回的文本内容
     getEditorContent(val) {
-      this.quesContent = val.content;
-      this.quesText = val.text;
+      if (val) {
+        this.quesContent = val.content;
+        this.quesText = val.text;
+      }
     },
 
     //发布回答评论

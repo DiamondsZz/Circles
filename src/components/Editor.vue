@@ -7,7 +7,7 @@
       id="upload"
       ref="upload"
       name="file"
-      :customRequest="upload"
+      :customRequest="imgUpload"
       @change="uploadChange"
     ></a-upload>
   </div>
@@ -26,6 +26,7 @@ export default {
       imgList: [], //fileList图片列表
       imgs: [], // {uid,base64}
       imgsUpload: [], //需要上传的图片
+      imgCover: "", //回答封面
       options: {
         placeholder: "请输入问题条件、背景等详细信息（选填）",
         modules: {
@@ -59,9 +60,9 @@ export default {
   methods: {
     editorChange(res) {
       this.text = res.text;
-      console.log(res);
-      console.log(this.imgList);
     },
+    //覆盖原来的文件上传
+    imgUpload(e) {},
     uploadChange({ file, fileList }) {
       if (file.size / 1024 > 5) {
         return this.$message.error("上传图片不能大于5KB");
@@ -77,6 +78,11 @@ export default {
           quill.insertEmbed(length, "image", e.target.result);
           // 调整光标到最后
           quill.setSelection(length + 1);
+          this.$emit("editorContent", {
+            content: this.content,
+            text: this.text,
+            cover: this.imgCover
+          });
           this.imgs.push({
             base64: e.target.result,
             file
@@ -84,35 +90,46 @@ export default {
         };
       }
     },
-    upload(up) {
+    //上传图片
+    upload(img) {
       let formData = new FormData();
-      formData.append("uploadFile", up.file);
-      // this.$axios
-      //   .post("/image/upload", formData, {
-      //     headers: { "Content-Type": "multiple/form-data" }
-      //   })
-      //   .then(res => {
-      //     if (res.status === 200) {
-      //     }
-      //   });
+      formData.append("uploadFile", img.originFileObj);
+      return this.$axios
+        .post("/image/upload", formData, {
+          headers: { "Content-Type": "multiple/form-data" }
+        })
+        .then(res => {
+          if (res.status === 200) {
+            return res.data;
+          }
+        });
     }
   },
   watch: {
-    isClickEditor(val) {
-      this.imgsUpload = this.content.match(new RegExp("<img.+?>", "g"));
+    //监听是否点击编辑器的发布按钮
+    async isClickEditor(val) {
       let imgsResult = []; //筛选后的图片file数组
-      for (let imgUpload of this.imgsUpload) {
-        let base64 = imgUpload.slice(
-          imgUpload.indexOf('"') + 1,
-          imgUpload.lastIndexOf('"')
-        );
-        let imgResult = this.imgs.find(img => {
-          return img.base64 === base64;
-        });
-        imgsResult.push(imgResult.file);
+      this.imgsUpload = this.content.match(new RegExp("<img.+?>", "g"));
+      if (this.imgsUpload) {
+        for (let imgUpload of this.imgsUpload) {
+          let base64 = imgUpload.slice(
+            imgUpload.indexOf('"') + 1,
+            imgUpload.lastIndexOf('"')
+          );
+          let imgResult = this.imgs.find(img => {
+            return img.base64 === base64;
+          });
+          imgsResult.push(imgResult.file);
+        }
       }
-
-      this.$emit("editorContent", { content: this.content, text: this.text });
+      if (imgsResult.length > 0) {
+        this.imgCover = await this.upload(imgsResult[0]);
+      }
+      this.$emit("editorContent", {
+        content: this.content,
+        text: this.text,
+        cover: this.imgCover
+      });
     }
   },
   components: { quillEditor }

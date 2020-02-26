@@ -188,7 +188,8 @@ export default {
             til: this.quesTil,
             content: this.quesContent,
             text: this.quesText,
-            type: this.tags
+            type: this.tags,
+            cover: this.quesCover
           })
           .then(res => {
             if (res.status === 200) {
@@ -207,6 +208,7 @@ export default {
       if (val) {
         this.quesContent = val.content;
         this.quesText = val.text;
+        this.quesCover = val.cover;
       }
     },
     checkQuestion() {
@@ -222,7 +224,7 @@ export default {
           return false;
         } else {
           if (!this.quesText.trim()) {
-            if (this.quesContent.indexOf('img') === -1) {
+            if (this.quesContent.indexOf("img") === -1) {
               this.$message.error("请详细描述你的问题");
               return false;
             }
