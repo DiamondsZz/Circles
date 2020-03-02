@@ -133,7 +133,7 @@ export default {
             if (res.data.isFollow) {
               this.$message.success("关注成功");
             } else {
-              this.$message.error("取消成功");
+              this.$message.success("取消成功");
             }
           }
         });

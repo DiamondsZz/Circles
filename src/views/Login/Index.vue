@@ -38,6 +38,11 @@ export default {
       this.form.validateFields((err, values) => {
         if (!err) {
           let { phone, password } = values;
+          let isPhone;
+          isPhone = this.checkPhone(phone);
+          if (!isPhone) {
+            return   this.$message.error("请输入正确的手机号");
+          };
           this.$store.commit("isLoad", {
             isLoad: true
           });
@@ -59,6 +64,15 @@ export default {
           });
         }
       });
+    },
+    //验证手机号
+    checkPhone(phone) {
+      let reg = /^[1][3,4,5,7,8][0-9]{9}$/;
+      if (!reg.test(phone)) {
+        return false;
+      } else {
+        return true;
+      }
     }
   },
   created() {},

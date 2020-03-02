@@ -1,8 +1,8 @@
 <!-- 发现-->
 <template>
   <div class="index">
-    <line-chart  :chartData="userData" til="来往榜（最近与你互动频繁的用户）"></line-chart>
-    <line-chart-answer  :chartData="answerData" til="热门问题榜"></line-chart-answer>
+    <line-chart :chartData="userData" til="来往榜（最近与你互动频繁的用户）"></line-chart>
+    <line-chart-answer :chartData="answerData" til="热门问题榜"></line-chart-answer>
   </div>
 </template>
 

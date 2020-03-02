@@ -158,7 +158,7 @@ export default {
 .head-details {
   width: 1000px;
   margin: 0 auto;
-  padding: 0 16px;
+  padding: 0 0px;
   height: 52px;
   display: flex;
   justify-content: space-between;

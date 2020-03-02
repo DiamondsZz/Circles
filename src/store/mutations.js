@@ -13,5 +13,9 @@ export default {
   },
   isLoad(state, { isLoad }) {
     state.isLoad = isLoad;
-  }
+  },
+  //用户兴趣爱好
+  interestingModal(state, { interestingModal }) {
+    state.interestingModal = interestingModal;
+  },
 }
