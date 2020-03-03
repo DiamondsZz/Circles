@@ -235,12 +235,14 @@ export default {
   padding: 16px 20px 0px;
 }
 .right-question .right-question-body .right-question-body-item {
+  display: flex;
+  justify-content: space-between;
   margin-bottom: 16px;
   color: #175199;
   cursor: pointer;
 }
 .right-question-body .right-question-body-item .right-question-body-answer {
-  float: right;
+  flex-shrink: 0;
   color: #8590a6;
 }
 

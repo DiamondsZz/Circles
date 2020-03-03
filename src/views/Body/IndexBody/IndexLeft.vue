@@ -39,7 +39,7 @@
           </a-list-item>
         </a-list>
         <div v-if="recomData.length>0" class="divider">你可能会感兴趣的问题</div>
-        <a-list itemLayout="vertical" :dataSource="data" :locale="{emptyText: ''}">
+        <a-list itemLayout="vertical" :dataSource="dataComputed" :locale="{emptyText: ''}">
           <a-list-item slot="renderItem" slot-scope="item">
             <div class="body-left-til" @click="showDetails(item)">{{item.til}}</div>
             <div class="body-left-answer">
@@ -82,7 +82,9 @@
               <img :src="item.user.userImg" alt />
             </div>
             <div class="follow-item-text">
-              <div class="follow-item-user">{{item.user.userName}}</div>
+              <div
+                class="follow-item-user"
+              >{{item.user.userName}} · {{moment(item.createdTime).format("YYYY-MM-DD")}}</div>
               <div class="follow-item-til" @click="showDetails(item)">{{item.til}}</div>
             </div>
           </div>
@@ -134,6 +136,7 @@
 </template>
 
 <script>
+import moment from "moment";
 export default {
   props: ["interesting"],
   data() {
@@ -146,6 +149,7 @@ export default {
     };
   },
   methods: {
+    moment,
     //路由调用
     router(path) {
       this.$router.push(path);
@@ -163,7 +167,10 @@ export default {
       switch (val) {
         case 1:
           this.getData();
-          this.getData({ type: this.interesting });
+          this.getData({
+            type: this.interesting,
+            user: this.$store.state.user._id
+          });
           break;
         case 2:
           this.getData({ user: this.$store.state.user._id });
@@ -202,6 +209,21 @@ export default {
         });
     }
   },
+  computed: {
+    //过滤掉与推荐数据中重复的数据
+    dataComputed() {
+      let res = [];
+      for (let ques of this.data) {
+        let isRepeat = this.recomData.some(rec => {
+          return rec._id === ques._id;
+        });
+        if (!isRepeat) {
+          res.push(ques);
+        }
+      }
+      return res;
+    }
+  },
   filters: {
     //获取问题回答富文本 的文本内容
     filterAnswerContent(val) {
@@ -210,7 +232,10 @@ export default {
   },
   watch: {
     interesting() {
-      this.getData({ type: this.interesting });
+      this.getData({
+        type: this.interesting,
+        user: this.$store.state.user._id
+      });
     }
   },
   created() {
