@@ -17,8 +17,8 @@ export default {
           left: "center",
           text: this.til
         },
-        grid:{
-        bottom:220,
+        grid: {
+          bottom: 220
         },
         xAxis: {
           type: "category",

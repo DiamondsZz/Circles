@@ -38,7 +38,7 @@
             <img v-if="item.cover" slot="extra" width="272" alt="logo" :src="item.cover" />
           </a-list-item>
         </a-list>
-        <div v-if="recomData.length>0" class="divider">你可能会感兴趣的问题</div>
+        <div v-if="data.length>0" class="divider">你可能会感兴趣的问题</div>
         <a-list itemLayout="vertical" :dataSource="dataComputed" :locale="{emptyText: ''}">
           <a-list-item slot="renderItem" slot-scope="item">
             <div class="body-left-til" @click="showDetails(item)">{{item.til}}</div>
@@ -321,6 +321,7 @@ export default {
   line-height: 30px;
   border-top: 1px dashed rgba(0, 0, 0, 0.1);
   border-bottom: 1px dashed rgba(0, 0, 0, 0.1);
+  margin-top: 20px;
 }
 
 /*关注页面*/
