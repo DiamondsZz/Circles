@@ -23,7 +23,7 @@
             <span
               type="link"
               class="details-body-head-content-left-short-btn"
-              v-if="!this.$store.state.questionCurrent.isShowTotal&&detailsContent&&detailsContent.length>200"
+              v-if="!this.$store.state.questionCurrent.isShowTotal&&detailsContent&&detailsContent.length>=80"
               @click="showTotal"
             >
               显示全部

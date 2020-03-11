@@ -63,13 +63,14 @@ export default {
         let index = this.data.x.findIndex(item => {
           return item.til === params.value;
         });
-
-        this.$router.push({
-          path: "details",
-          query: {
-            id: this.data.x[index]._id
-          }
-        });
+        if (index !== -1) {
+          this.$router.push({
+            path: "details",
+            query: {
+              id: this.data.x[index]._id
+            }
+          });
+        }
       });
     }
   },

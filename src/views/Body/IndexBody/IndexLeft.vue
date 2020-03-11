@@ -38,8 +38,8 @@
             <img v-if="item.cover" slot="extra" width="272" alt="logo" :src="item.cover" />
           </a-list-item>
         </a-list>
-        <div v-if="data.length>0" class="divider">你可能会感兴趣的问题</div>
-        <a-list itemLayout="vertical" :dataSource="dataComputed" :locale="{emptyText: ''}">
+        <!-- <div v-if="data.length>0" class="divider">你可能会感兴趣的问题</div> -->
+        <!-- <a-list itemLayout="vertical" :dataSource="dataComputed" :locale="{emptyText: ''}">
           <a-list-item slot="renderItem" slot-scope="item">
             <div class="body-left-til" @click="showDetails(item)">{{item.til}}</div>
             <div class="body-left-answer">
@@ -56,10 +56,10 @@
                 />
                 {{item.answer&&item.answer[0].like}}
               </span>
-              <!-- <span>
+              <span>
                 <a-icon type="dislike" class="body-left-actions-icon" theme="filled" />
                 {{item.question_answer&&item.question_answer[0].dislike}}
-              </span>-->
+              </span>
               <span>
                 <a-icon type="message" class="body-left-actions-icon" theme="filled" />
                 <span>{{item.answer&&item.answer[0].commentCount}}条评论</span>
@@ -73,7 +73,7 @@
             </template>
             <img v-if="item.cover" slot="extra" width="272" alt="logo" :src="item.cover" />
           </a-list-item>
-        </a-list>
+        </a-list>-->
       </a-tab-pane>
       <a-tab-pane class="follow" tab="关注" :key="2">
         <div v-if="followData.length>0">
@@ -82,10 +82,17 @@
               <img :src="item.user.userImg" alt />
             </div>
             <div class="follow-item-text">
+              <div class="follow-item-user">
+                {{item.user.userName}}
+                <span>{{item.type|filterMessage(item)}}</span>
+                · {{moment(item.createdTime).format("YYYY-MM-DD")}}
+              </div>
               <div
-                class="follow-item-user"
-              >{{item.user.userName}} · {{moment(item.createdTime).format("YYYY-MM-DD")}}</div>
-              <div class="follow-item-til" @click="showDetails(item)">{{item.til}}</div>
+                v-if="item.type!==0"
+                class="follow-item-til"
+                @click="showDetails(item.question)"
+              >{{item.question&&item.question.til}}</div>
+              <div v-else class="follow-item-til" @click="showDetails(item)">{{item.til}}</div>
             </div>
           </div>
         </div>
@@ -201,7 +208,12 @@ export default {
             if (params && params.type) {
               this.recomData = res.data;
             } else if (params && params.user) {
-              this.followData = res.data;
+              this.followData = res.data.map(item => {
+                if (typeof item.type === "object") {
+                  item.type = 0;
+                }
+                return item;
+              });
             } else {
               this.data = res.data;
             }
@@ -228,6 +240,22 @@ export default {
     //获取问题回答富文本 的文本内容
     filterAnswerContent(val) {
       return val && val.replace(new RegExp("<.+?>", "g"), "");
+    },
+    filterMessage(type, item) {
+      switch (type) {
+        case 0:
+          return `发表了问题`;
+          break;
+        case 1:
+          return `关注了问题`;
+          break;
+        case 2:
+          return `发表了评论`;
+          break;
+        case 3:
+          return `回答了问题`;
+          break;
+      }
     }
   },
   watch: {

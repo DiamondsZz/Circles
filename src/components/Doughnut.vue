@@ -57,7 +57,11 @@ export default {
               };
             })
           }
-        ],
+        ]
+      });
+
+      Chart.on("click", params => {
+        this.$emit("showUser", params.data.name);
       });
     }
   },
