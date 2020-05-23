@@ -7,8 +7,8 @@
           <a-list-item slot="renderItem" slot-scope="item">
             <div class="body-left-til" @click="showDetails(item)">{{item.til}}</div>
             <div class="body-left-answer">
-              {{item.answer&&item.answer[0].user.userName}}：
-              <span>{{item.answer&&item.answer[0].content|filterAnswerContent}}</span>
+              {{item.answer&&item.answer[0]&&item.answer[0].user.userName}}：
+              <span>{{item.answer&&item.answer[0]&&item.answer[0].content|filterAnswerContent}}</span>
             </div>
             <template slot="actions">
               <span>
@@ -18,7 +18,7 @@
                   theme="filled"
                   @click="likeClick(item)"
                 />
-                {{item.answer&&item.answer[0].like}}
+                {{item.answer&&item.answer[0]&&item.answer[0].like}}
               </span>
               <!-- <span>
                 <a-icon type="dislike" class="body-left-actions-icon" theme="filled" />
@@ -26,7 +26,7 @@
               </span>-->
               <span>
                 <a-icon type="message" class="body-left-actions-icon" theme="filled" />
-                <span>{{item.answer&&item.answer[0].commentCount}}条评论</span>
+                <span>{{item.answer&&item.answer[0]&&item.answer[0].commentCount}}条评论</span>
               </span>
               <span>
                 <a-icon type="rocket" class="body-left-actions-icon" theme="filled" />分享
@@ -35,7 +35,12 @@
                 <a-icon type="star" class="body-left-actions-icon" theme="filled" />收藏
               </span>
             </template>
-            <img v-if="item.cover" slot="extra" width="272" alt="logo" :src="item.cover" />
+            <img
+              slot="extra"
+              width="272"
+              alt="logo"
+              :src="item.cover?item.cover:'http://127.0.0.1:7001/public/ques/ae2fb8fa-83dd-48b7-a158-2013e8431b91logo.png'"
+            />
           </a-list-item>
         </a-list>
         <!-- <div v-if="data.length>0" class="divider">你可能会感兴趣的问题</div> -->
@@ -98,7 +103,7 @@
         </div>
         <div class="empty" v-else>
           <a-icon type="frown" theme="filled" class="empty-icon" />
-          <p class="empty-text">你还没有关注用户哦</p>
+          <p class="empty-text">空空如也</p>
         </div>
       </a-tab-pane>
       <a-tab-pane tab="热榜" :key="3">
@@ -106,8 +111,8 @@
           <a-list-item slot="renderItem" slot-scope="item">
             <div class="body-left-til" @click="showDetails(item)">{{item.til}}</div>
             <div class="body-left-answer">
-              {{item.answer&&item.answer[0].user.userName}}：
-              <span>{{item.answer&&item.answer[0].content|filterAnswerContent}}</span>
+              {{item.answer&&item.answer[0]&&item.answer[0].user.userName}}：
+              <span>{{item.answer&&item.answer[0]&&item.answer[0].content|filterAnswerContent}}</span>
             </div>
             <template slot="actions">
               <span>
@@ -117,7 +122,7 @@
                   theme="filled"
                   @click="likeClick(item)"
                 />
-                {{item.answer&&item.answer[0].like}}
+                {{item.answer&&item.answer[0]&&item.answer[0].like}}
               </span>
               <!-- <span>
                 <a-icon type="dislike" class="body-left-actions-icon" theme="filled" />
@@ -125,7 +130,7 @@
               </span>-->
               <span>
                 <a-icon type="message" class="body-left-actions-icon" theme="filled" />
-                <span>{{item.answer&&item.answer[0].commentCount}}条评论</span>
+                <span>{{item.answer&&item.answer[0]&&item.answer[0].commentCount}}条评论</span>
               </span>
               <span>
                 <a-icon type="rocket" class="body-left-actions-icon" theme="filled" />分享
@@ -173,11 +178,7 @@ export default {
     tabChange(val) {
       switch (val) {
         case 1:
-          this.getData();
-          this.getData({
-            type: this.interesting,
-            user: this.$store.state.user._id
-          });
+          this.isRecom();
           break;
         case 2:
           this.getData({ user: this.$store.state.user._id });
@@ -185,6 +186,16 @@ export default {
         case 3:
           this.getData({ isHot: true });
           break;
+      }
+    },
+    isRecom() {
+      if (this.interesting.length > 0) {
+        this.getData({
+          type: this.interesting,
+          user: this.$store.state.user._id
+        });
+      } else {
+        this.getData();
       }
     },
     //赞
@@ -215,6 +226,7 @@ export default {
                 return item;
               });
             } else {
+              this.recomData = res.data;
               this.data = res.data;
             }
           }

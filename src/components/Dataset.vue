@@ -12,7 +12,7 @@ export default {
   methods: {
     mountChart() {
       let Chart = this.$echarts.init(this.$refs.chart);
-      Chart.off("click");  //避免多次触发
+      Chart.off("click"); //避免多次触发
       Chart.setOption({
         title: { text: this.til },
         legend: {},
@@ -29,7 +29,7 @@ export default {
         })
       });
       Chart.on("click", params => {
-        console.log(params.seriesName);
+        this.$emit("name", params.seriesName);
       });
     }
   },

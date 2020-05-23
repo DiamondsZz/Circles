@@ -6,7 +6,7 @@
       <doughnut :chartData="typeData" til="问题分类统计"></doughnut>
       <doughnut :chartData="interestingData" til="用户兴趣分类统计" @showUser="showUsers"></doughnut>
       <line-chart-answer :chartData="answerData" til="热门问题榜"></line-chart-answer>
-      <Dataset :chartData="userDataset" til="关于你的"></Dataset>
+      <Dataset :chartData="userDataset" til="关于你的" @name="clickName"></Dataset>
       <!-- <Dataset chartData="[" til="话题榜"></Dataset> -->
     </div>
     <a-modal
@@ -31,6 +31,20 @@
         </div>
       </div>
     </a-modal>
+
+    <!-- 当前用户感兴趣问题-->
+    <a-drawer
+      :title="'有关'+type+'的热门问题'"
+      placement="right"
+      :closable="false"
+      @close="drawerVisible=false"
+      :visible="drawerVisible"
+    >
+      <div class="question" v-for="(item,i) in userQuestion" :key="i" @click="showQuestion(item)">
+        <span class="qusetion-num">{{i+1}}.</span>
+        {{item.til}}
+      </div>
+    </a-drawer>
   </div>
 </template>
 
@@ -49,10 +63,20 @@ export default {
       userVisible: false, //用户面板
       users: [], //用户
       typeName: "", //兴趣爱好名字
-      userDataset: {} //大v榜
+      userDataset: {}, //大v榜
+      drawerVisible: false,
+      userQuestion: [], //当前用户感兴趣的问题
+      type: "" //当前用户点击的问题分类
     };
   },
   methods: {
+    //进入问题详情页面
+    showQuestion(item) {
+      this.$router.push({
+        path: "details",
+        query: { id: item._id }
+      });
+    },
     //查看用户
     showUsers(name) {
       this.userVisible = true;
@@ -131,6 +155,7 @@ export default {
         }
       });
     },
+    //获取当前用户最近一周感兴趣话题的问题并统计相应问题的热度
     getUserDataset() {
       this.$axios
         .get("/question/user/get", {
@@ -144,6 +169,16 @@ export default {
             };
           }
         });
+    },
+    //关于你的   图表点击问题时触发
+    clickName(name) {
+      this.type = name;
+      this.$axios.get("/question/get", { params: { type: name } }).then(res => {
+        if (res.status === 200) {
+          this.drawerVisible = true;
+          this.userQuestion = res.data;
+        }
+      });
     }
   },
   created() {
@@ -185,5 +220,11 @@ export default {
   margin-left: 20px;
   font-size: 16px;
   font-weight: bold;
+}
+
+/*问题抽屉*/
+.question {
+  margin-bottom: 10px;
+  cursor: pointer;
 }
 </style>
